@@ -68,8 +68,8 @@
         <span class="name" title="${escapeHtml(rule.name)}">${escapeHtml(rule.name)}</span>
         <span class="pattern" title="${escapeHtml(rule.matcher)}">${escapeHtml(rule.matcher)}</span>
         <div class="actions">
-          <button type="button" class="btn-icon edit" title="Edit" data-id="${escapeHtml(rule.id)}">✎</button>
-          <button type="button" class="btn-icon delete" title="Delete" data-id="${escapeHtml(rule.id)}">🗑</button>
+          <button type="button" class="btn-icon edit" title="Edit" data-id="${escapeHtml(rule.id)}"><span class="material-icons">edit</span></button>
+          <button type="button" class="btn-icon delete" title="Delete" data-id="${escapeHtml(rule.id)}"><span class="material-icons">delete</span></button>
         </div>
       `;
       li.querySelector('.edit').addEventListener('click', () => openForm(rule.id));

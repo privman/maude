@@ -3,6 +3,13 @@
   "name": "Maude",
   "version": "1.0.0",
   "description": "A browser extension for modding web pages and web apps.",
+  "icons": {
+    "16": "icons/icon16.png",
+    "32": "icons/icon32.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "theme_color": "#264239",
   "permissions": ["storage", "activeTab", "scripting"],
   "host_permissions": ["<all_urls>"],
   "action": {

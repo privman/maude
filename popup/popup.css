@@ -1,57 +1,104 @@
+:root {
+  /* Brand (from logo) */
+  --color-teal: #264239;
+  --color-teal-hover: #1d322c;
+  --color-orange: #e87230;
+  --color-orange-hover: #d66320;
+  --color-peach: #fad2b4;
+  --color-peach-hover: #f0c4a0;
+
+  /* Surfaces */
+  --color-bg: #fef8f5;
+  --color-surface: #fff;
+  --color-surface-muted: #f5f5f5;
+
+  /* Text */
+  --color-text: #1a1a1a;
+  --color-text-strong: #333;
+  --color-text-muted: #666;
+  --color-text-inverse: #fff;
+
+  /* Borders */
+  --color-border: #e0e0e0;
+  --color-border-light: #eee;
+  --color-border-input: #ccc;
+
+  /* Actions */
+  --color-danger: #c33;
+  --color-danger-hover: #a22;
+  --color-danger-bg-hover: #fee;
+  --color-warn: #b8860b;
+  --color-icon-hover-bg: #eee;
+
+  /* Overlay & shadow */
+  --color-overlay: rgb(0 0 0 / 0.4);
+  --color-shadow: rgb(0 0 0 / 0.2);
+}
+
 * {
   box-sizing: border-box;
 }
 
 body {
   font-family: system-ui, -apple-system, sans-serif;
-  font-size: 13px;
+  font-size: 12px;
   margin: 0;
-  min-width: 360px;
-  max-width: 420px;
-  min-height: 320px;
-  color: #1a1a1a;
-  background: #f8f9fa;
+  min-width: 340px;
+  max-width: 400px;
+  min-height: 280px;
+  max-height: 90vh;
+  overflow-y: auto;
+  color: var(--color-text);
+  background: var(--color-bg);
 }
 
 .header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 12px 14px;
-  background: #2d2d2d;
-  color: #fff;
+  padding: 8px 10px;
+  background: var(--color-teal);
+  color: var(--color-text-inverse);
+}
+
+.header-icon {
+  width: 22px;
+  height: 22px;
+  margin-right: 6px;
+  flex-shrink: 0;
 }
 
 .title {
   margin: 0;
-  font-size: 1.15rem;
+  font-size: 1.05rem;
   font-weight: 600;
+  flex: 1;
 }
 
 .btn {
   border: none;
   cursor: pointer;
   font-size: inherit;
-  border-radius: 6px;
-  padding: 6px 12px;
+  border-radius: 4px;
+  padding: 4px 8px;
 }
 
 .btn-add {
-  width: 32px;
-  height: 32px;
+  width: 28px;
+  height: 28px;
   padding: 0;
-  font-size: 1.4rem;
+  font-size: 1.25rem;
   line-height: 1;
-  background: #4a9eff;
-  color: #fff;
+  background: var(--color-orange);
+  color: var(--color-text-inverse);
 }
 
 .btn-add:hover {
-  background: #3a8eef;
+  background: var(--color-orange-hover);
 }
 
 .main {
-  padding: 10px 14px 14px;
+  padding: 6px 10px 10px;
 }
 
 .rule-list {
@@ -63,12 +110,12 @@ body {
 .rule-item {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 10px 12px;
-  background: #fff;
-  border: 1px solid #e0e0e0;
-  border-radius: 8px;
-  margin-bottom: 8px;
+  gap: 6px;
+  padding: 6px 8px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  margin-bottom: 6px;
 }
 
 .rule-item .name {
@@ -81,8 +128,8 @@ body {
 
 .rule-item .pattern {
   flex: 1;
-  font-size: 11px;
-  color: #666;
+  font-size: 10px;
+  color: var(--color-text-muted);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -90,36 +137,43 @@ body {
 
 .rule-item .actions {
   display: flex;
-  gap: 4px;
+  gap: 2px;
 }
 
 .rule-item .btn-icon {
-  width: 28px;
-  height: 28px;
+  width: 26px;
+  height: 26px;
   padding: 0;
   border: none;
   border-radius: 4px;
   cursor: pointer;
   background: transparent;
-  color: #666;
+  color: var(--color-text-muted);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.rule-item .btn-icon .material-icons {
+  font-size: 18px;
 }
 
 .rule-item .btn-icon:hover {
-  background: #eee;
-  color: #333;
+  background: var(--color-icon-hover-bg);
+  color: var(--color-text-strong);
 }
 
 .rule-item .btn-icon.delete:hover {
-  background: #fee;
-  color: #c33;
+  background: var(--color-danger-bg-hover);
+  color: var(--color-danger);
 }
 
 .form-section {
-  margin-top: 14px;
-  padding: 14px;
-  background: #fff;
-  border: 1px solid #e0e0e0;
-  border-radius: 8px;
+  margin-top: 8px;
+  padding: 10px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
 }
 
 .form-section.hidden {
@@ -127,29 +181,33 @@ body {
 }
 
 .form-title {
-  margin: 0 0 12px;
-  font-size: 1rem;
+  margin: 0 0 8px;
+  font-size: 0.95rem;
 }
 
 .field {
-  margin-bottom: 12px;
+  margin-bottom: 8px;
+}
+
+.field:last-of-type {
+  margin-bottom: 0;
 }
 
 .field label {
   display: block;
-  margin-bottom: 4px;
+  margin-bottom: 2px;
   font-weight: 500;
-  color: #333;
+  color: var(--color-text-strong);
 }
 
 .field .hint {
-  margin: 4px 0 0;
-  font-size: 11px;
-  color: #666;
+  margin: 2px 0 0;
+  font-size: 10px;
+  color: var(--color-text-muted);
 }
 
 .field .hint.warn {
-  color: #b8860b;
+  color: var(--color-warn);
 }
 
 .field input[type="text"],
@@ -158,25 +216,26 @@ body {
 .field textarea,
 .field select {
   width: 100%;
-  padding: 6px 8px;
-  border: 1px solid #ccc;
+  padding: 4px 6px;
+  border: 1px solid var(--color-border-input);
   border-radius: 4px;
   font: inherit;
+  font-size: 12px;
 }
 
 .field textarea {
   resize: vertical;
+  min-height: 4em;
   font-family: ui-monospace, monospace;
-  font-size: 12px;
 }
 
 .matcher-row {
   display: flex;
-  gap: 8px;
+  gap: 6px;
 }
 
 .matcher-row select {
-  width: 100px;
+  width: 90px;
   flex-shrink: 0;
 }
 
@@ -187,23 +246,23 @@ body {
 
 .script-tabs {
   display: flex;
-  gap: 4px;
-  margin-bottom: 8px;
+  gap: 2px;
+  margin-bottom: 4px;
 }
 
 .script-tabs .tab {
-  padding: 6px 12px;
-  border: 1px solid #ccc;
-  background: #fff;
+  padding: 4px 8px;
+  border: 1px solid var(--color-border-input);
+  background: var(--color-surface);
   border-radius: 4px;
   cursor: pointer;
-  font-size: 12px;
+  font-size: 11px;
 }
 
 .script-tabs .tab.active {
-  background: #2d2d2d;
-  color: #fff;
-  border-color: #2d2d2d;
+  background: var(--color-teal);
+  color: var(--color-text-inverse);
+  border-color: var(--color-teal);
 }
 
 .script-panel {
@@ -219,66 +278,104 @@ body {
 }
 
 .script-panel textarea {
-  width: 100%;
+  height: 80px;
 }
 
 .script-panel pre.script-preview {
-  margin: 8px 0 0;
-  padding: 8px;
-  background: #f5f5f5;
+  margin: 4px 0 0;
+  padding: 6px;
+  background: var(--color-surface-muted);
   border-radius: 4px;
-  font-size: 11px;
-  max-height: 120px;
+  font-size: 10px;
+  max-height: 80px;
   overflow: auto;
   white-space: pre-wrap;
   word-break: break-all;
 }
 
-.timing-row {
+.section-heading {
+  margin: 0 0 6px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.url-matcher,
+.script-section,
+.injection-timing {
+  border-top: 1px solid var(--color-border-light);
+  padding-top: 8px;
+}
+
+.url-matcher .section-heading,
+.script-section .section-heading,
+.injection-timing .section-heading {
+  margin-top: 0;
+  padding-left: 12px;
+}
+
+.injection-timing .timing-row {
+  margin-bottom: 4px;
+}
+
+.injection-timing .field {
   margin-bottom: 8px;
+}
+
+.timing-row {
+  margin-bottom: 4px;
+}
+
+.timing-row:last-child {
+  margin-bottom: 0;
 }
 
 .timing-row .inline {
   display: block;
-  margin-bottom: 4px;
+  margin-bottom: 2px;
 }
 
 .timing-row input[type="number"] {
-  width: 80px;
-  margin-left: 8px;
+  width: 64px;
+  margin-left: 6px;
+}
+
+.timing-row textarea {
+  height: 48px;
+  min-height: 48px;
 }
 
 .form-actions {
   display: flex;
   justify-content: flex-end;
-  gap: 8px;
-  margin-top: 14px;
-  padding-top: 12px;
-  border-top: 1px solid #eee;
+  gap: 6px;
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 1px solid var(--color-border-light);
 }
 
 .btn-primary {
-  background: #2d2d2d;
-  color: #fff;
+  background: var(--color-teal);
+  color: var(--color-text-inverse);
 }
 
 .btn-primary:hover {
-  background: #1a1a1a;
+  background: var(--color-teal-hover);
 }
 
 .btn-secondary {
-  background: #e0e0e0;
-  color: #333;
+  background: var(--color-peach);
+  color: var(--color-text-strong);
 }
 
 .btn-secondary:hover {
-  background: #d0d0d0;
+  background: var(--color-peach-hover);
 }
 
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.4);
+  background: var(--color-overlay);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -286,28 +383,28 @@ body {
 }
 
 .modal {
-  background: #fff;
-  padding: 20px;
-  border-radius: 8px;
-  max-width: 320px;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+  background: var(--color-surface);
+  padding: 16px;
+  border-radius: 6px;
+  max-width: 300px;
+  box-shadow: 0 4px 20px var(--color-shadow);
 }
 
 .modal p {
-  margin: 0 0 16px;
+  margin: 0 0 12px;
 }
 
 .modal-actions {
   display: flex;
   justify-content: flex-end;
-  gap: 8px;
+  gap: 6px;
 }
 
 .modal .btn-danger {
-  background: #c33;
-  color: #fff;
+  background: var(--color-danger);
+  color: var(--color-text-inverse);
 }
 
 .modal .btn-danger:hover {
-  background: #a22;
+  background: var(--color-danger-hover);
 }
