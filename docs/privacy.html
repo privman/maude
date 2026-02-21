@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Privacy - Maude</title>
+  <meta name="description" content="Maude privacy policy">
+  <link rel="icon" href="https://github.com/privman/maude/raw/main/icons/icon32.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,600;1,9..40,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="tokens.css">
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: 'DM Sans', system-ui, -apple-system, sans-serif;
+      font-size: 1rem;
+      line-height: 1.6;
+      color: var(--color-text);
+      background: var(--color-bg);
+    }
+
+    .wrap {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 0 1.25rem 4rem;
+    }
+
+    header {
+      background: var(--color-teal);
+      color: #fff;
+      padding: 2.5rem 1.25rem 3rem;
+      margin-bottom: 2rem;
+    }
+
+    .header-wrap {
+      max-width: 720px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    header img {
+      width: 48px;
+      height: 48px;
+      flex-shrink: 0;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 1.75rem;
+      font-weight: 600;
+    }
+
+    header p {
+      margin: 0.5rem 0 0;
+      opacity: 0.9;
+      font-size: 1rem;
+    }
+
+    h2 {
+      font-size: 1.35rem;
+      font-weight: 600;
+      color: var(--color-teal);
+      margin: 2rem 0 0.75rem;
+      padding-bottom: 0.25rem;
+    }
+
+    h2:first-of-type { margin-top: 0; }
+
+    h3 {
+      font-size: 1.05rem;
+      font-weight: 600;
+      margin: 1.25rem 0 0.5rem;
+    }
+
+    p { margin: 0 0 0.75rem; }
+
+    ul {
+      margin: 0 0 0.75rem;
+      padding-left: 1.5rem;
+    }
+
+    li { margin-bottom: 0.35rem; }
+
+    a {
+      color: var(--color-orange);
+      text-decoration: none;
+    }
+
+    a:hover { text-decoration: underline; }
+
+    footer {
+      margin-top: 3rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--color-border);
+      font-size: 0.9rem;
+      color: var(--color-text-muted);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-wrap">
+      <img src="https://github.com/privman/maude/raw/main/icons/icon48.png" alt="" width="48" height="48">
+      <div>
+        <h1>Maude</h1>
+        <p>Privacy</p>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <h2>We do not collect your data</h2>
+    <p>Maude does not collect, transmit, or store any of your data on our servers. We don't have any servers.
+    Nothing you do in Maude is sent to us, or anywhere else, unless you create a maude that sends something.</p>
+
+    <h2>Where your data lives</h2>
+    <p>All of your data is stored <strong>locally in your browser</strong> using Chrome's local storage.
+    Your maudes (names, URL patterns, scripts, and settings) exist only on your device, unless you publish them.
+    Uninstalling the extension removes its data from Chrome's local storage.</p>
+
+    <h2>Why Maude requests permissions</h2>
+    <p>Chrome requires extensions to declare permissions. Here is what Maude uses and why:</p>
+
+    <h3>storage</h3>
+    <p>Your maudes are saved in Chrome's local storage so they persist between sessions.
+    This is the only place they are stored.</p>
+
+    <h3>activeTab</h3>
+    <p>When you open Maude, we need access to the tab you are viewing so we can show its URL (e.g. to prefill a new
+    maude) and so we can run your maudes on that tab when they match. Access to the tab is only used when you
+    interact with Maude or when you have a maude that matches the current page.</p>
+
+    <h3>scripting</h3>
+    <p>Maude injects the scripts you specify into the pages you choose for each of them. This permission is used only to run your
+    scripts you have configured, and only on the pages you have configured them for.</p>
+
+    <h3>sidePanel</h3>
+    <p>Maude uses Chrome's side panel to show the list of maudes and the controls for managing them.</p>
+
+    <h3>Access to sites your visit</h3>
+    <p>Maude needs access to the sites you visit so it can inject your scripts into them. We do not access page content for any other purpose.</p>
+
+    <h3>Remote code</h3>
+    <p>Maude injects the scripts you specify into the pages you choose for each of them. Those scripts have full access
+    to these pages and their content, so make sure you trust the scripts you add.
+    We do not use this access in any other way.</p>
+
+    <footer>
+      <p><a href="index.html">Back to Maude docs</a></p>
+    </footer>
+  </main>
+</body>
+</html>

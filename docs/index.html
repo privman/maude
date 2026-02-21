@@ -44,8 +44,8 @@
     }
 
     header img {
-      width: 48px;
-      height: 48px;
+      width: 64px;
+      height: 64px;
       flex-shrink: 0;
     }
 
@@ -279,7 +279,7 @@
 <body id="top">
   <header>
     <div class="header-wrap">
-      <img src="https://github.com/privman/maude/raw/main/icons/icon48.png" alt="" width="48" height="48">
+      <img src="https://github.com/privman/maude/raw/main/icons/icon128.png" alt="" width="64" height="64">
       <div>
         <h1>Maude</h1>
         <p>Mod the web. Inject your own scripts into any page based on URL maudes.</p>
@@ -315,11 +315,17 @@
       </details>
 
   <main class="wrap">
-    <p>Maude is a browser extension that lets you run custom JavaScript on specific websites. Define maudes that match URLs (by wildcard or regex), add a script, and optional timing—delay and/or a condition that must be true before injection. Your script runs in the page context, so you can change layout, add features, or automate actions.</p>
+    <p>
+      Maude is a browser extension that lets you run custom JavaScript on specific websites.
+    </p><p>
+      Each maude you define matches a set of web pages (or apps) that you wish to maudify.
+      Each maude runs whenever you visit a matching page, and can change the page's layout, add features,
+      or automate tedious steps.
+    </p>
 
     <h2 id="getting-started">Getting started</h2>
     <ol>
-      <li>Install Maude from the Chrome Web Store.</li>
+      <li>Install Maude from the Chrome Web Store. (version 0.1.1 is currently in review)</li>
       <li>Click the Maude icon in your toolbar to open the side panel.</li>
       <li>Click the <strong>+</strong> button to add a maude, or <strong>Import</strong> to add one from a manifest URL.</li>
     </ol>
@@ -392,6 +398,7 @@
 
     <footer>
       <p>Maude is open source. Use it to mod the web the way you want.</p>
+      <p><a href="privacy.html">Privacy</a></p>
     </footer>
   </main>
     </div>
