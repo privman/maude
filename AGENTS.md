@@ -8,9 +8,10 @@ Conventions and decisions that are useful to keep when working on this repo.
 
 ## Code style
 
-- Prefer **async/await** over `.then()` for async flow. Use a **sync function** when there’s no real async work (e.g. don’t make a function `async` just to return a value).
+- Prefer **async/await** over `.then()` for async flow. Use a **sync function** when there's no real async work (e.g. don't make a function `async` just to return a value).
 - Inline one-off helpers instead of tiny named functions used once.
-- Don’t await **storage writes** when the UI already reflects the new state; fire the write and update UI immediately for responsiveness.
+- Don't await **storage writes** when the UI already reflects the new state; fire the write and update UI immediately for responsiveness.
+- Use **ASCII apostrophe** (`'` U+0027) and **hyphen-minus** (`-` U+002D) only; no curly/smart apostrophe (U+2019) or en/em dash (U+2013, U+2014).
 - **Recent browsers only**: no legacy fallbacks (e.g. Trusted Types only, no blob fallback; no `escapeHtml` polyfill).
 
 ## Extension behaviour

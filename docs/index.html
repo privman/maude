@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Maude – Mod the web</title>
+  <meta name="description" content="A browser extension for injecting your own scripts into web pages based on URL rules. Mod web pages and web apps the way you want.">
+  <link rel="icon" href="https://github.com/privman/maude/raw/main/icons/icon32.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,600;1,9..40,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="tokens.css">
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: 'DM Sans', system-ui, -apple-system, sans-serif;
+      font-size: 1rem;
+      line-height: 1.6;
+      color: var(--color-text);
+      background: var(--color-bg);
+    }
+
+    .wrap {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 0 1.25rem 4rem;
+    }
+
+    header {
+      background: var(--color-teal);
+      color: #fff;
+      padding: 2.5rem 1.25rem 3rem;
+      margin-bottom: 2rem;
+    }
+
+    .header-wrap {
+      max-width: 720px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    header img {
+      width: 48px;
+      height: 48px;
+      flex-shrink: 0;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 1.75rem;
+      font-weight: 600;
+    }
+
+    header p {
+      margin: 0.5rem 0 0;
+      opacity: 0.9;
+      font-size: 1rem;
+    }
+
+    h2 {
+      font-size: 1.35rem;
+      font-weight: 600;
+      color: var(--color-teal);
+      margin: 2rem 0 0.75rem;
+      padding-bottom: 0.25rem;
+    }
+
+    h2:first-of-type { margin-top: 0; }
+
+    h3 {
+      font-size: 1.05rem;
+      font-weight: 600;
+      margin: 1.25rem 0 0.5rem;
+    }
+
+    p { margin: 0 0 0.75rem; }
+
+    ul, ol {
+      margin: 0 0 0.75rem;
+      padding-left: 1.5rem;
+    }
+
+    li { margin-bottom: 0.35rem; }
+
+    code {
+      font-family: ui-monospace, monospace;
+      font-size: 0.9em;
+      background: var(--color-code-bg);
+      padding: 0.15em 0.4em;
+      border-radius: 4px;
+    }
+
+    .tip {
+      background: #f0f7f4;
+      border-left: 4px solid var(--color-teal);
+      padding: 0.75rem 1rem;
+      margin: 1rem 0;
+      border-radius: 0 var(--radius) var(--radius) 0;
+    }
+
+    .warn {
+      background: #fef8f0;
+      border-left: 4px solid var(--color-orange);
+      padding: 0.75rem 1rem;
+      margin: 1rem 0;
+      border-radius: 0 var(--radius) var(--radius) 0;
+    }
+
+    a {
+      color: var(--color-orange);
+      text-decoration: none;
+    }
+
+    a:hover { text-decoration: underline; }
+
+    .btn {
+      display: inline-block;
+      background: var(--color-orange);
+      color: #fff;
+      padding: 0.6rem 1.25rem;
+      border-radius: var(--radius);
+      font-weight: 600;
+      font-size: 0.95rem;
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      margin-top: 0.5rem;
+    }
+
+    .btn:hover {
+      background: var(--color-orange-hover);
+      text-decoration: none;
+    }
+
+    footer {
+      margin-top: 3rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--color-border);
+      font-size: 0.9rem;
+      color: var(--color-text-muted);
+    }
+
+    /* Layout: sidebar on wide, collapsible TOC on narrow */
+    .layout {
+      display: flex;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .sidebar {
+      display: none;
+      flex-shrink: 0;
+      width: 12rem;
+      padding: 1rem 1.5rem 2rem 1.25rem;
+      position: sticky;
+      top: 0;
+      max-height: 100vh;
+      overflow-y: auto;
+      border-right: 1px solid var(--color-border);
+    }
+
+    .sidebar .toc {
+      padding: 0;
+    }
+
+    .sidebar .toc ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .sidebar .toc a {
+      display: block;
+      padding: 0.35rem 0;
+      font-size: 0.9rem;
+      color: var(--color-text-muted);
+    }
+
+    .sidebar .toc a:hover {
+      color: var(--color-orange);
+    }
+
+    .content {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .toc-collapse {
+      display: block;
+      margin: 0 1.25rem 1rem;
+      padding: 0.75rem 1rem;
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+    }
+
+    .toc-collapse summary {
+      cursor: pointer;
+      font-weight: 600;
+      color: var(--color-teal);
+      user-select: none;
+      list-style: none;
+    }
+
+    .toc-collapse summary::marker,
+    .toc-collapse summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .toc-collapse summary::before {
+      content: "▸ ";
+      display: inline-block;
+      transition: transform 0.15s ease;
+    }
+
+    .toc-collapse[open] summary::before {
+      transform: rotate(90deg);
+    }
+
+    .toc-collapse .toc ul {
+      list-style: none;
+      padding: 0.5rem 0 0 1rem;
+      margin: 0;
+    }
+
+    .toc-collapse .toc a {
+      display: block;
+      padding: 0.25rem 0;
+      font-size: 0.9rem;
+    }
+
+    @media (min-width: 56rem) {
+      .sidebar {
+        display: block;
+      }
+
+      .toc-collapse {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-wrap">
+      <img src="https://github.com/privman/maude/raw/main/icons/icon48.png" alt="" width="48" height="48">
+      <div>
+        <h1>Maude</h1>
+        <p>Mod the web. Inject your own scripts into any page based on URL rules.</p>
+      </div>
+    </div>
+  </header>
+
+  <div class="layout">
+    <aside class="sidebar">
+      <nav class="toc" aria-label="Contents">
+        <ul>
+          <li><a href="#top"><span class="material-icons">arrow_up</span> Back to top</a></li>
+          <li><a href="#getting-started">Getting started</a></li>
+          <li><a href="#creating-a-rule">Creating a rule</a></li>
+          <li><a href="#managing-rules">Managing rules</a></li>
+          <li><a href="#use-cases">Use cases</a></li>
+        </ul>
+      </nav>
+    </aside>
+    <div class="content">
+      <details class="toc-collapse">
+        <summary>Contents</summary>
+        <nav class="toc" aria-label="Contents">
+          <ul>
+            <li><a href="#getting-started">Getting started</a></li>
+            <li><a href="#creating-a-rule">Creating a rule</a></li>
+            <li><a href="#managing-rules">Managing rules</a></li>
+            <li><a href="#use-cases">Use cases</a></li>
+          </ul>
+        </nav>
+      </details>
+
+  <main class="wrap">
+    <p>Maude is a browser extension that lets you run custom JavaScript on specific websites. Define rules that match URLs (by wildcard or regex), add a script, and optional timing—delay and/or a condition that must be true before injection. Your script runs in the page context, so you can change layout, add features, or automate actions.</p>
+
+    <h2 id="getting-started">Getting started</h2>
+    <ol>
+      <li>Install Maude from the Chrome Web Store.</li>
+      <li>Click the Maude icon in your toolbar to open the popup.</li>
+      <li>Click the <strong>+</strong> button to add your first rule.</li>
+    </ol>
+
+    <h2 id="creating-a-rule">Creating a rule</h2>
+
+    <h3>Name</h3>
+    <p>Kind of self-explanatory.</p>
+
+    <h3>URL matcher</h3>
+    <p>This defines which pages the script runs on (in combination with the condition below, if specified).</p>
+    <ul>
+      <li><strong>Wildcard</strong>: Use <code>?</code> for a single character and <code>*</code> for any sequence. Example: <code>https://*.example.com/*</code> matches all pages on any subdomain of example.com.</li>
+      <li><strong>Regex</strong>: Use a full JavaScript regular expression to match the page URL.</li>
+    </ul>
+
+    <h3>Script</h3>
+    <p>Choose how to provide the JavaScript to inject:</p>
+    <ul>
+      <li><strong>Editor</strong>: Type or paste code into the editor.</li>
+      <li><strong>Upload</strong>: Select a <code>.js</code> file from your computer.</li>
+      <li><strong>From URL</strong>: Enter a URL that returns JavaScript. Only use sources you trust—the script runs with full page access.</li>
+    </ul>
+
+    <h3>Injection timing</h3>
+    <ul>
+      <li><strong>Delay (seconds)</strong>: Wait this many seconds after the page load (or after the condition starts being checked) before injecting. Use this when the page needs time to render.</li>
+      <li>
+        <strong>Condition</strong>: JavaScript that runs in the page; the script is injected only if and when this expression returns a truthy value. For example, <code>document.querySelector('.app')</code> injects once that element exists.<br />
+        If you also set a delay, the condition is checked repeatedly at that interval until it passes.</li>
+    </ul>
+
+    <h2 id="managing-rules">Managing rules</h2>
+    <p>In the rule list, use the <strong>pencil</strong> icon to edit a rule. Use the <strong>bin</strong> icon to delete it; you'll be asked to confirm first.</p>
+    <p class="tip">If you added the script by uploading a file or fetching from a URL, you'll need to repeat this if you want to update the script (Maude doesn't re-read the source).</p>
+
+    <h2 id="use-cases">Use cases</h2>
+    <ul>
+      <li>Restyle or simplify a site (hide elements, change fonts or colours).</li>
+      <li>Add keyboard shortcuts or buttons to a web app.</li>
+      <li>Auto-fill forms or run one-off automation on pages you visit often.</li>
+      <li>Inject a small script that depends on the page's DOM or timing.</li>
+    </ul>
+
+    <p><a href="https://github.com/privman/maude" class="btn">View on GitHub</a></p>
+
+    <footer>
+      <p>Maude is open source. Use it to mod the web the way you want.</p>
+    </footer>
+  </main>
+    </div>
+  </div>
+</body>
+</html>

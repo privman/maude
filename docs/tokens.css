@@ -1,0 +1,26 @@
+/* Shared design tokens – single source for popup and docs */
+:root {
+  /* Brand (from logo) */
+  --color-teal: #264239;
+  --color-teal-hover: #1d322c;
+  --color-orange: #e87230;
+  --color-orange-hover: #d66320;
+  --color-peach: #fad2b4;
+  --color-peach-hover: #f0c4a0;
+
+  /* Surfaces */
+  --color-bg: #fef8f5;
+  --color-surface: #fff;
+
+  /* Text */
+  --color-text: #1a1a1a;
+  --color-text-muted: #666;
+
+  /* Borders */
+  --color-border: #e0e0e0;
+
+  /* Shared UI */
+  --color-code-bg: #f0f0f0;
+  --radius: 8px;
+  --shadow: 0 2px 12px rgb(0 0 0 / 0.08);
+}

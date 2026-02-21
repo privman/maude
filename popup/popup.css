@@ -1,36 +1,17 @@
+@import url("../docs/tokens.css");
+
 :root {
-  /* Brand (from logo) */
-  --color-teal: #264239;
-  --color-teal-hover: #1d322c;
-  --color-orange: #e87230;
-  --color-orange-hover: #d66320;
-  --color-peach: #fad2b4;
-  --color-peach-hover: #f0c4a0;
-
-  /* Surfaces */
-  --color-bg: #fef8f5;
-  --color-surface: #fff;
+  /* Popup-only: extend shared tokens */
   --color-surface-muted: #f5f5f5;
-
-  /* Text */
-  --color-text: #1a1a1a;
   --color-text-strong: #333;
-  --color-text-muted: #666;
   --color-text-inverse: #fff;
-
-  /* Borders */
-  --color-border: #e0e0e0;
   --color-border-light: #eee;
   --color-border-input: #ccc;
-
-  /* Actions */
   --color-danger: #c33;
   --color-danger-hover: #a22;
   --color-danger-bg-hover: #fee;
   --color-warn: #b8860b;
   --color-icon-hover-bg: #eee;
-
-  /* Overlay & shadow */
   --color-overlay: rgb(0 0 0 / 0.4);
   --color-shadow: rgb(0 0 0 / 0.2);
 }
