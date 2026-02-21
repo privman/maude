@@ -73,8 +73,8 @@ function scheduleInjection(tabId, rule) {
     : 0;
   const hasCondition = !!(rule.injectionCondition && rule.injectionCondition.trim());
 
-  function doInject() {
-    injectScript(tabId, rule.scriptContent || '');
+  function doInject(content = rule.scriptContent) {
+    injectScript(tabId, content);
   }
 
   function checkConditionThenInject() {
@@ -116,6 +116,52 @@ async function onTabUpdated(tabId, changeInfo, tab) {
   }
 }
 
-chrome.sidePanel.setPanelBehavior({ openPanelOnActionClick: true }).catch(() => {});
+chrome.sidePanel.setPanelBehavior({ openPanelOnActionClick: false }).catch(() => {});
+
+let panelTabId = null;
+let panelPort = null;
+let panelUrl = null;
+
+chrome.runtime.onConnect.addListener((port) => {
+  if (port.name !== 'maude-panel') return;
+  panelPort = port;
+  if (panelUrl != null) port.postMessage({ type: 'pageUrl', url: panelUrl });
+  port.onDisconnect.addListener(() => {
+    panelPort = null;
+  });
+});
+
+chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
+  if (msg.type === 'pageUrl' && sender.tab && sender.tab.id === panelTabId) {
+    panelUrl = msg.url || null;
+    if (panelPort) panelPort.postMessage({ type: 'pageUrl', url: panelUrl });
+  }
+});
+
+const URL_NOTIFIER_MAIN =
+  '(function(){function notify(){document.dispatchEvent(new CustomEvent("maude-url-change",{detail:location.href}));}notify();var origPush=history.pushState,origReplace=history.replaceState;history.pushState=function(){origPush.apply(this,arguments);notify();};history.replaceState=function(){origReplace.apply(this,arguments);notify();};window.addEventListener("popstate",notify);window.addEventListener("hashchange",notify);})();';
+
+function runUrlNotifierIsolated() {
+  function sendUrl(u) {
+    try {
+      if (chrome.runtime?.id) chrome.runtime.sendMessage({ type: 'pageUrl', url: u || location.href });
+    } catch (_) {}
+  }
+  sendUrl(location.href);
+  document.addEventListener('maude-url-change', (e) => sendUrl(e.detail));
+}
+
+chrome.action.onClicked.addListener((tab) => {
+  panelTabId = tab.id;
+  panelUrl = tab.url || null;
+  chrome.sidePanel.open({ windowId: tab.windowId });
+  injectScript(tab.id, URL_NOTIFIER_MAIN).then(() => {
+    return chrome.scripting.executeScript({
+      target: { tabId: tab.id },
+      world: 'ISOLATED',
+      func: runUrlNotifierIsolated,
+    });
+  }).catch(() => {});
+});
 
 chrome.tabs.onUpdated.addListener(onTabUpdated);

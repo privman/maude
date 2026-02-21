@@ -10,8 +10,15 @@
     "128": "icons/icon128.png"
   },
   "theme_color": "#264239",
-  "permissions": ["storage", "activeTab", "scripting", "sidePanel"],
-  "optional_host_permissions": ["<all_urls>"],
+  "permissions": [
+    "storage",
+    "activeTab",
+    "scripting",
+    "sidePanel"
+  ],
+  "optional_host_permissions": [
+    "<all_urls>"
+  ],
   "action": {
     "default_title": "Maude"
   },

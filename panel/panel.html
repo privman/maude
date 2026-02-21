@@ -20,16 +20,24 @@
     <ul class="rule-list" id="rule-list"></ul>
 
     <section class="import-section hidden" id="import-section">
-      <label for="import-url">Manifest URL</label>
-      <div class="import-url-row">
-        <input type="url" id="import-url" placeholder="https://example.com/maude.json" class="import-url-input">
-        <button type="button" class="btn btn-secondary" id="import-cancel">Cancel</button>
-        <button type="button" class="btn btn-primary" id="import-load">Load</button>
+      <div class="section-header">
+        <label for="import-url" class="section-title">Manifest URL</label>
+        <div class="section-actions">
+          <button type="button" class="btn btn-secondary" id="import-cancel">Cancel</button>
+          <button type="button" class="btn btn-primary" id="import-load">Load</button>
+        </div>
       </div>
+      <input type="url" id="import-url" placeholder="https://example.com/maude.json" class="import-url-input">
     </section>
 
     <section class="form-section hidden" id="form-section">
-      <h2 class="form-title" id="form-title">New rule</h2>
+      <div class="section-header">
+        <h2 class="form-title section-title" id="form-title">New rule</h2>
+        <div class="section-actions">
+          <button type="button" class="btn btn-secondary" id="btn-cancel">Cancel</button>
+          <button type="button" class="btn btn-primary" id="btn-save">Save</button>
+        </div>
+      </div>
 
       <div class="field">
         <label for="rule-name">Name</label>
@@ -78,11 +86,6 @@
           <label class="inline">Condition (runs in page; inject when/if this returns a truthy value)</label>
           <textarea id="injection-condition" rows="3" placeholder="// e.g. document.querySelector('.app')"></textarea>
         </div>
-      </div>
-
-      <div class="form-actions">
-        <button type="button" class="btn btn-secondary" id="btn-cancel">Cancel</button>
-        <button type="button" class="btn btn-primary" id="btn-save">Save</button>
       </div>
     </section>
   </main>

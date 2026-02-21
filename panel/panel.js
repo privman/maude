@@ -27,6 +27,7 @@
 
   let rules = [];
   let editingId = null;
+  let prefillUrl = null;
 
   function generateId() {
     return 'r' + Date.now() + '-' + Math.random().toString(36).slice(2, 9);
@@ -61,18 +62,19 @@
     });
   }
 
-  function getCurrentTabUrl(cb) {
-    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-      if (tabs[0] && tabs[0].url) cb(tabs[0].url);
-      else cb('');
-    });
-  }
+  const port = chrome.runtime.connect({ name: 'maude-panel' });
+  port.onMessage.addListener((msg) => {
+    if (msg.type === 'pageUrl' && msg.url != null) {
+      prefillUrl = msg.url;
+    }
+  });
 
   function renderRuleList() {
     ruleListEl.innerHTML = '';
     rules.forEach((rule) => {
       const li = document.createElement('li');
       li.className = 'rule-item';
+      li.dataset.ruleId = rule.id;
       li.innerHTML = `
         <span class="name" title="${escapeHtml(rule.name)}">${escapeHtml(rule.name)}</span>
         <span class="pattern" title="${escapeHtml(rule.matcher)}">${escapeHtml(rule.matcher)}</span>
@@ -180,9 +182,7 @@
       if (options && options.importData) {
         applyFormData(options.importData);
       } else {
-        getCurrentTabUrl((url) => {
-          matcherPattern.value = url;
-        });
+        matcherPattern.value = prefillUrl || '';
       }
     }
   }
@@ -223,28 +223,26 @@
   function confirmDelete(ruleId) {
     const rule = rules.find((r) => r.id === ruleId);
     const name = rule ? rule.name : 'this rule';
-    const overlay = document.createElement('div');
-    overlay.className = 'modal-overlay';
-    overlay.innerHTML = `
-      <div class="modal">
-        <p>Delete "${escapeHtml(name)}"?</p>
-        <div class="modal-actions">
-          <button type="button" class="btn btn-secondary modal-cancel">Cancel</button>
-          <button type="button" class="btn btn-danger modal-confirm">Delete</button>
-        </div>
+    const ruleLi = ruleListEl.querySelector(`.rule-item[data-rule-id="${CSS.escape(ruleId)}"]`);
+    if (!ruleLi) return;
+    const confirmLi = document.createElement('li');
+    confirmLi.className = 'delete-confirm-row';
+    confirmLi.innerHTML = `
+      <div class="delete-confirm">
+        <span>Delete "${escapeHtml(name)}"?</span>
+        <button type="button" class="btn btn-secondary delete-confirm-cancel">Cancel</button>
+        <button type="button" class="btn btn-danger delete-confirm-submit">Delete</button>
       </div>
     `;
-    const cancel = () => overlay.remove();
-    overlay.querySelector('.modal-cancel').addEventListener('click', cancel);
-    overlay.querySelector('.modal-confirm').addEventListener('click', () => {
+    const removeConfirm = () => confirmLi.remove();
+    confirmLi.querySelector('.delete-confirm-cancel').addEventListener('click', removeConfirm);
+    confirmLi.querySelector('.delete-confirm-submit').addEventListener('click', () => {
       rules = rules.filter((r) => r.id !== ruleId);
       saveRules().then(() => {
         renderRuleList();
-        overlay.remove();
       });
     });
-    overlay.addEventListener('click', (e) => { if (e.target === overlay) cancel(); });
-    document.body.appendChild(overlay);
+    ruleLi.after(confirmLi);
   }
 
   function closeScriptUrlRow() {
@@ -291,13 +289,11 @@
   });
 
   btnImport.addEventListener('click', () => {
-    getCurrentTabUrl((url) => {
-      importUrlInput.value = url || '';
-      ruleListEl.classList.add('hidden');
-      formSection.classList.add('hidden');
-      importSection.classList.remove('hidden');
-      importUrlInput.focus();
-    });
+    importUrlInput.value = prefillUrl || '';
+    ruleListEl.classList.add('hidden');
+    formSection.classList.add('hidden');
+    importSection.classList.remove('hidden');
+    importUrlInput.focus();
   });
 
   importCancelBtn.addEventListener('click', () => {
@@ -329,6 +325,13 @@
   btnAdd.addEventListener('click', () => openForm(null));
   btnCancel.addEventListener('click', closeForm);
   btnSave.addEventListener('click', saveFromForm);
+
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) {
+      prefillUrl = null;
+      window.close();
+    }
+  });
 
   loadRules().then(() => {
     renderRuleList();
