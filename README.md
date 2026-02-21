@@ -43,5 +43,5 @@ To **publish** a rule for others: host two files on the same path (e.g. GitHub P
 
 See the [example in docs/examples](https://github.com/privman/maude/tree/main/docs/examples/copy-gcal-event-link) (maude.json + script).
 
-If the manifest is at `https://yoursite.com/rule/maude.json`, Maude fetches the script from `https://yoursite.com/rule/my-script.js`. Full details: [docs](https://privman.github.io/maude/#publishing-rules).
+If the manifest is at `https://yoursite.com/rule/maude.json`, Maude fetches the script from `https://yoursite.com/rule/my-script.js`. Full details: [docs](https://privman.github.io/maude/#managing-rules).
 
