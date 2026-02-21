@@ -12,8 +12,12 @@
   const matcherPattern = document.getElementById('matcher-pattern');
   const scriptEditor = document.getElementById('script-editor');
   const scriptFile = document.getElementById('script-file');
-  const scriptUploadPreview = document.getElementById('script-upload-preview');
+  const scriptUploadBtn = document.getElementById('script-upload-btn');
   const scriptUrl = document.getElementById('script-url');
+  const scriptUrlRow = document.getElementById('script-url-row');
+  const scriptUrlToggle = document.getElementById('script-url-toggle');
+  const scriptUrlLoad = document.getElementById('script-url-load');
+  const scriptUrlCancel = document.getElementById('script-url-cancel');
   const delaySeconds = document.getElementById('delay-seconds');
   const injectionCondition = document.getElementById('injection-condition');
   const importSection = document.getElementById('import-section');
@@ -89,14 +93,6 @@
     return el.innerHTML;
   }
 
-  function setScriptSource(source) {
-    document.querySelectorAll('.script-tabs .tab').forEach((t) => t.classList.toggle('active', t.dataset.source === source));
-    document.querySelectorAll('.script-panel').forEach((p) => {
-      p.classList.toggle('active', p.dataset.panel === source);
-      p.classList.toggle('hidden', p.dataset.panel !== source);
-    });
-  }
-
   async function fetchManifestFormData(manifestUrl) {
     const url = manifestUrl.trim();
     if (!url) throw new Error('Enter a manifest URL');
@@ -131,32 +127,21 @@
     matcherPattern.value = data.matcher || '';
     scriptEditor.value = data.scriptContent || '';
     scriptUrl.value = '';
-    scriptUploadPreview.textContent = '';
     scriptFile.value = '';
+    closeScriptUrlRow();
     delaySeconds.value = data.delaySeconds != null ? data.delaySeconds : '';
     injectionCondition.value = data.injectionCondition || '';
-    setScriptSource('editor');
   }
 
-  async function getScriptContentFromForm() {
-    if (document.querySelector('.script-tabs .tab[data-source="url"]').classList.contains('active')) {
-      const url = scriptUrl.value.trim();
-      if (!url) return '';
-      const r = await fetch(url);
-      return r.text();
-    }
-    if (document.querySelector('.script-tabs .tab[data-source="upload"]').classList.contains('active')) {
-      return scriptUploadPreview.textContent || '';
-    }
+  function getScriptContentFromForm() {
     return scriptEditor.value;
   }
 
   function setScriptContentForEdit(rule) {
-    setScriptSource('editor');
     scriptEditor.value = rule.scriptContent || '';
     scriptUrl.value = '';
-    scriptUploadPreview.textContent = '';
     scriptFile.value = '';
+    closeScriptUrlRow();
   }
 
   function showRuleList() {
@@ -188,11 +173,10 @@
       matcherPattern.value = '';
       scriptEditor.value = '';
       scriptUrl.value = '';
-      scriptUploadPreview.textContent = '';
       scriptFile.value = '';
+      closeScriptUrlRow();
       delaySeconds.value = '';
       injectionCondition.value = '';
-      setScriptSource('editor');
       if (options && options.importData) {
         applyFormData(options.importData);
       } else {
@@ -221,7 +205,7 @@
     };
 
     try {
-      data.scriptContent = await getScriptContentFromForm();
+      data.scriptContent = getScriptContentFromForm();
       if (editingId) {
         const rule = rules.find((r) => r.id === editingId);
         if (rule) Object.assign(rule, data);
@@ -263,9 +247,47 @@
     document.body.appendChild(overlay);
   }
 
-  // Tab clicks for script source
-  document.querySelectorAll('.script-tabs .tab').forEach((tab) => {
-    tab.addEventListener('click', () => setScriptSource(tab.dataset.source));
+  function closeScriptUrlRow() {
+    scriptUrlRow.classList.add('hidden');
+    scriptUrl.value = '';
+  }
+
+  scriptUploadBtn.addEventListener('click', () => scriptFile.click());
+  scriptFile.addEventListener('change', () => {
+    const file = scriptFile.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      scriptEditor.value = reader.result;
+      scriptFile.value = '';
+    };
+    reader.readAsText(file);
+  });
+
+  scriptUrlToggle.addEventListener('click', () => scriptUrlRow.classList.remove('hidden'));
+  scriptUrlCancel.addEventListener('click', closeScriptUrlRow);
+  scriptUrlLoad.addEventListener('click', () => {
+    const url = scriptUrl.value.trim();
+    if (!url) {
+      alert('Enter a URL');
+      return;
+    }
+    fetch(url)
+      .then((r) => {
+        if (!r.ok) throw new Error('Failed to load: ' + r.status);
+        return r.text();
+      })
+      .then((text) => {
+        scriptEditor.value = text;
+        closeScriptUrlRow();
+      })
+      .catch((err) => alert('Failed to load: ' + (err.message || err)));
+  });
+  scriptUrl.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      scriptUrlLoad.click();
+    }
   });
 
   btnImport.addEventListener('click', () => {
@@ -302,16 +324,6 @@
       e.preventDefault();
       importLoadBtn.click();
     }
-  });
-
-  scriptFile.addEventListener('change', () => {
-    const file = scriptFile.files[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = () => {
-      scriptUploadPreview.textContent = reader.result;
-    };
-    reader.readAsText(file);
   });
 
   btnAdd.addEventListener('click', () => openForm(null));

@@ -50,20 +50,18 @@
 
       <div class="field script-section">
         <h3 class="section-heading">Script</h3>
-        <div class="script-tabs">
-          <button type="button" class="tab active" data-source="editor">Editor</button>
-          <button type="button" class="tab" data-source="upload">Upload</button>
-          <button type="button" class="tab" data-source="url">From URL</button>
+        <textarea id="script-editor" rows="8" placeholder="Paste JavaScript here…"></textarea>
+        <div class="script-actions">
+          <button type="button" class="btn btn-secondary btn-script-action" id="script-upload-btn">Upload file</button>
+          <input type="file" id="script-file" accept=".js,application/javascript" class="hidden-file-input">
+          <button type="button" class="btn btn-secondary btn-script-action" id="script-url-toggle">Load from URL</button>
         </div>
-        <div class="script-panel script-editor active" data-panel="editor">
-          <textarea id="script-editor" rows="8" placeholder="Paste JavaScript here…"></textarea>
-        </div>
-        <div class="script-panel script-upload hidden" data-panel="upload">
-          <input type="file" id="script-file" accept=".js,application/javascript">
-          <pre class="script-preview" id="script-upload-preview"></pre>
-        </div>
-        <div class="script-panel script-url hidden" data-panel="url">
-          <input type="url" id="script-url" placeholder="https://example.com/script.js">
+        <div class="script-url-row hidden" id="script-url-row">
+          <div class="script-url-input-row">
+            <input type="url" id="script-url" placeholder="https://example.com/script.js" class="script-url-input">
+            <button type="button" class="btn btn-primary" id="script-url-load">Load</button>
+            <button type="button" class="btn btn-secondary" id="script-url-cancel">Cancel</button>
+          </div>
           <p class="hint warn">Only use trusted sources.</p>
         </div>
       </div>
