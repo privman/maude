@@ -116,4 +116,6 @@ async function onTabUpdated(tabId, changeInfo, tab) {
   }
 }
 
+chrome.sidePanel.setPanelBehavior({ openPanelOnActionClick: true }).catch(() => {});
+
 chrome.tabs.onUpdated.addListener(onTabUpdated);

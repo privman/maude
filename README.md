@@ -34,7 +34,7 @@ Press the bin icon next to any exiting rule to delete it (a confirmation will be
 
 ## Publishing and importing rules
 
-To **import** a rule from a URL: click **Import** in the popup, enter the URL of a manifest file, then **Load**. You can review and edit the rule before saving.
+To **import** a rule from a URL: click **Import** in the side panel, enter the URL of a manifest file, then **Load**. You can review and edit the rule before saving.
 
 To **publish** a rule for others: host two files on the same path (e.g. GitHub Pages or any static host):
 

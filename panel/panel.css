@@ -1,7 +1,7 @@
 @import url("../docs/tokens.css");
 
 :root {
-  /* Popup-only: extend shared tokens */
+  /* Panel-only: extend shared tokens */
   --color-surface-muted: #f5f5f5;
   --color-text-strong: #333;
   --color-text-inverse: #fff;
@@ -20,15 +20,17 @@
   box-sizing: border-box;
 }
 
+html,
+body {
+  height: 100%;
+  margin: 0;
+}
+
 body {
   font-family: system-ui, -apple-system, sans-serif;
   font-size: 12px;
-  margin: 0;
-  min-width: 340px;
-  max-width: 400px;
-  min-height: 280px;
-  max-height: 90vh;
-  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
   color: var(--color-text);
   background: var(--color-bg);
 }
@@ -83,7 +85,10 @@ body {
 }
 
 .main {
+  flex: 1;
   padding: 6px 10px 10px;
+  overflow-y: auto;
+  min-height: 0;
 }
 
 .rule-list {

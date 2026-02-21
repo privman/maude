@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Maude",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A browser extension for modding web pages and web apps.",
   "icons": {
     "16": "icons/icon16.png",
@@ -10,11 +10,13 @@
     "128": "icons/icon128.png"
   },
   "theme_color": "#264239",
-  "permissions": ["storage", "activeTab", "scripting"],
+  "permissions": ["storage", "activeTab", "scripting", "sidePanel"],
   "optional_host_permissions": ["<all_urls>"],
   "action": {
-    "default_popup": "popup/popup.html",
     "default_title": "Maude"
+  },
+  "side_panel": {
+    "default_path": "panel/panel.html"
   },
   "background": {
     "service_worker": "background.js"
