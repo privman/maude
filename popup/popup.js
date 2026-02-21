@@ -9,7 +9,7 @@
   const ruleName = document.getElementById('rule-name');
   const matcherMode = document.getElementById('matcher-mode');
   const matcherPattern = document.getElementById('matcher-pattern');
-  const scriptPaste = document.getElementById('script-paste');
+  const scriptEditor = document.getElementById('script-editor');
   const scriptFile = document.getElementById('script-file');
   const scriptUploadPreview = document.getElementById('script-upload-preview');
   const scriptUrl = document.getElementById('script-url');
@@ -102,12 +102,12 @@
     if (document.querySelector('.script-tabs .tab[data-source="upload"]').classList.contains('active')) {
       return scriptUploadPreview.textContent || '';
     }
-    return scriptPaste.value;
+    return scriptEditor.value;
   }
 
   function setScriptContentForEdit(rule) {
-    setScriptSource('paste');
-    scriptPaste.value = rule.scriptContent || '';
+    setScriptSource('editor');
+    scriptEditor.value = rule.scriptContent || '';
     scriptUrl.value = '';
     scriptUploadPreview.textContent = '';
     scriptFile.value = '';
@@ -134,13 +134,13 @@
       getCurrentTabUrl((url) => {
         matcherPattern.value = url;
       });
-      scriptPaste.value = '';
+      scriptEditor.value = '';
       scriptUrl.value = '';
       scriptUploadPreview.textContent = '';
       scriptFile.value = '';
       delaySeconds.value = '';
       injectionCondition.value = '';
-      setScriptSource('paste');
+      setScriptSource('editor');
     }
   }
 

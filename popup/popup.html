@@ -41,12 +41,12 @@
       <div class="field script-section">
         <h3 class="section-heading">Script</h3>
         <div class="script-tabs">
-          <button type="button" class="tab active" data-source="paste">Paste</button>
+          <button type="button" class="tab active" data-source="editor">Editor</button>
           <button type="button" class="tab" data-source="upload">Upload</button>
           <button type="button" class="tab" data-source="url">From URL</button>
         </div>
-        <div class="script-panel script-paste active" data-panel="paste">
-          <textarea id="script-paste" rows="8" placeholder="Paste JavaScript here…"></textarea>
+        <div class="script-panel script-editor active" data-panel="editor">
+          <textarea id="script-editor" rows="8" placeholder="Paste JavaScript here…"></textarea>
         </div>
         <div class="script-panel script-upload hidden" data-panel="upload">
           <input type="file" id="script-file" accept=".js,application/javascript">
@@ -67,7 +67,7 @@
           </label>
         </div>
         <div class="timing-row">
-          <label class="inline">Condition (runs in page; inject when it returns true)</label>
+          <label class="inline">Condition (runs in page; inject when/if this returns a truthy value)</label>
           <textarea id="injection-condition" rows="3" placeholder="// e.g. document.querySelector('.app')"></textarea>
         </div>
       </div>
