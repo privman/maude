@@ -1,0 +1,7 @@
+{
+    "name": "Copy GCal Event Link",
+    "version": "1.0.0",
+    "description": "Copy the link to a Google Calendar event",
+    "matches": "https://calendar.google.com/calendar/r*",
+    "js": "copy-gcal-event-link.js"
+}
