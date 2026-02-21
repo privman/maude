@@ -31,3 +31,17 @@ Press the pencil icon next to any existing rule to:
 1. Update the timing options.
 
 Press the bin icon next to any exiting rule to delete it (a confirmation will be shown first).
+
+## Publishing and importing rules
+
+To **import** a rule from a URL: click **Import** in the popup, enter the URL of a manifest file, then **Load**. You can review and edit the rule before saving.
+
+To **publish** a rule for others: host two files on the same path (e.g. GitHub Pages or any static host):
+
+1. **manifest.json** - JSON with `name`, `matches` (single URL pattern), and `js` (script filename relative to the manifest). Optional: `matcherMode` ("wildcard" or "regex"), `delaySeconds`, `injectionCondition`.
+2. Your **script file** - the JavaScript to inject.
+
+See the [example in docs/examples](https://github.com/privman/maude/tree/main/docs/examples/copy-gcal-event-link) (manifest + script).
+
+If the manifest is at `https://yoursite.com/rule/manifest.json`, Maude fetches the script from `https://yoursite.com/rule/my-script.js`. Full details: [docs](https://privman.github.io/maude/#publishing-rules).
+

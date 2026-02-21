@@ -78,6 +78,10 @@ body {
   background: var(--color-orange-hover);
 }
 
+.header .btn-import {
+  margin-right: 6px;
+}
+
 .main {
   padding: 6px 10px 10px;
 }
@@ -86,6 +90,10 @@ body {
   list-style: none;
   margin: 0;
   padding: 0;
+}
+
+.rule-list.hidden {
+  display: none;
 }
 
 .rule-item {
@@ -147,6 +155,35 @@ body {
 .rule-item .btn-icon.delete:hover {
   background: var(--color-danger-bg-hover);
   color: var(--color-danger);
+}
+
+.import-section {
+  margin-top: 8px;
+  padding: 10px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+}
+
+.import-section.hidden {
+  display: none;
+}
+
+.import-section label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 500;
+}
+
+.import-url-row {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.import-url-row .import-url-input {
+  flex: 1;
+  min-width: 0;
 }
 
 .form-section {

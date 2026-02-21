@@ -4,6 +4,7 @@
   const formSection = document.getElementById('form-section');
   const formTitle = document.getElementById('form-title');
   const btnAdd = document.getElementById('btn-add');
+  const btnImport = document.getElementById('btn-import');
   const btnCancel = document.getElementById('btn-cancel');
   const btnSave = document.getElementById('btn-save');
   const ruleName = document.getElementById('rule-name');
@@ -15,6 +16,10 @@
   const scriptUrl = document.getElementById('script-url');
   const delaySeconds = document.getElementById('delay-seconds');
   const injectionCondition = document.getElementById('injection-condition');
+  const importSection = document.getElementById('import-section');
+  const importUrlInput = document.getElementById('import-url');
+  const importCancelBtn = document.getElementById('import-cancel');
+  const importLoadBtn = document.getElementById('import-load');
 
   let rules = [];
   let editingId = null;
@@ -92,6 +97,47 @@
     });
   }
 
+  async function fetchManifestFormData(manifestUrl) {
+    const url = manifestUrl.trim();
+    if (!url) throw new Error('Enter a manifest URL');
+    const res = await fetch(url);
+    if (!res.ok) throw new Error('Manifest not found: ' + res.status);
+    const manifest = await res.json();
+    const base = url.replace(/\/[^/]*$/, '/');
+    const matcher = manifest.matches || '*';
+    const jsFile = manifest.js;
+    let scriptContent = '';
+    if (jsFile) {
+      const scriptResourceUrl = jsFile.startsWith('http') ? jsFile : base + jsFile;
+      const r = await fetch(scriptResourceUrl);
+      if (!r.ok) throw new Error('Script not found: ' + jsFile);
+      scriptContent = await r.text();
+    }
+    const delay = manifest.delaySeconds;
+    return {
+      name: manifest.name || 'Unnamed',
+      matcherMode: manifest.matcherMode === 'regex' ? 'regex' : 'wildcard',
+      matcher,
+      scriptContent,
+      delaySeconds: delay != null && delay !== '' ? String(delay) : '',
+      injectionCondition: manifest.injectionCondition || '',
+    };
+  }
+
+  function applyFormData(data) {
+    ruleName.value = data.name;
+    ruleName.placeholder = getDefaultName();
+    matcherMode.value = data.matcherMode || 'wildcard';
+    matcherPattern.value = data.matcher || '';
+    scriptEditor.value = data.scriptContent || '';
+    scriptUrl.value = '';
+    scriptUploadPreview.textContent = '';
+    scriptFile.value = '';
+    delaySeconds.value = data.delaySeconds != null ? data.delaySeconds : '';
+    injectionCondition.value = data.injectionCondition || '';
+    setScriptSource('editor');
+  }
+
   async function getScriptContentFromForm() {
     if (document.querySelector('.script-tabs .tab[data-source="url"]').classList.contains('active')) {
       const url = scriptUrl.value.trim();
@@ -113,8 +159,16 @@
     scriptFile.value = '';
   }
 
-  function openForm(ruleId = null) {
+  function showRuleList() {
+    ruleListEl.classList.remove('hidden');
+    importSection.classList.add('hidden');
+    formSection.classList.add('hidden');
+  }
+
+  function openForm(ruleId = null, options = null) {
     editingId = ruleId;
+    ruleListEl.classList.add('hidden');
+    importSection.classList.add('hidden');
     formSection.classList.remove('hidden');
     formTitle.textContent = ruleId ? 'Edit rule' : 'New rule';
 
@@ -131,9 +185,7 @@
       ruleName.value = '';
       ruleName.placeholder = getDefaultName();
       matcherMode.value = 'wildcard';
-      getCurrentTabUrl((url) => {
-        matcherPattern.value = url;
-      });
+      matcherPattern.value = '';
       scriptEditor.value = '';
       scriptUrl.value = '';
       scriptUploadPreview.textContent = '';
@@ -141,12 +193,20 @@
       delaySeconds.value = '';
       injectionCondition.value = '';
       setScriptSource('editor');
+      if (options && options.importData) {
+        applyFormData(options.importData);
+      } else {
+        getCurrentTabUrl((url) => {
+          matcherPattern.value = url;
+        });
+      }
     }
   }
 
   function closeForm() {
     formSection.classList.add('hidden');
     editingId = null;
+    showRuleList();
   }
 
   async function saveFromForm() {
@@ -206,6 +266,42 @@
   // Tab clicks for script source
   document.querySelectorAll('.script-tabs .tab').forEach((tab) => {
     tab.addEventListener('click', () => setScriptSource(tab.dataset.source));
+  });
+
+  btnImport.addEventListener('click', () => {
+    getCurrentTabUrl((url) => {
+      importUrlInput.value = url || '';
+      ruleListEl.classList.add('hidden');
+      formSection.classList.add('hidden');
+      importSection.classList.remove('hidden');
+      importUrlInput.focus();
+    });
+  });
+
+  importCancelBtn.addEventListener('click', () => {
+    importSection.classList.add('hidden');
+    showRuleList();
+  });
+
+  importLoadBtn.addEventListener('click', () => {
+    const url = importUrlInput.value.trim();
+    if (!url) {
+      alert('Enter a manifest URL');
+      return;
+    }
+    fetchManifestFormData(url)
+      .then((data) => {
+        importSection.classList.add('hidden');
+        openForm(null, { importData: data });
+      })
+      .catch((err) => alert('Failed to load manifest: ' + (err.message || err)));
+  });
+
+  importUrlInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      importLoadBtn.click();
+    }
   });
 
   scriptFile.addEventListener('change', () => {

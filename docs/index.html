@@ -94,6 +94,20 @@
       border-radius: 4px;
     }
 
+    pre {
+      margin: 0.75rem 0;
+      padding: 0.75rem;
+      background: var(--color-code-bg);
+      border-radius: 4px;
+      overflow-x: auto;
+      font-size: 0.9em;
+    }
+
+    pre code {
+      padding: 0;
+      background: none;
+    }
+
     .tip {
       background: #f0f7f4;
       border-left: 4px solid var(--color-teal);
@@ -263,6 +277,7 @@
           <li><a href="#getting-started">Getting started</a></li>
           <li><a href="#creating-a-rule">Creating a rule</a></li>
           <li><a href="#managing-rules">Managing rules</a></li>
+          <li><a href="#publishing-rules">Publishing rules</a></li>
           <li><a href="#use-cases">Use cases</a></li>
         </ul>
       </nav>
@@ -275,6 +290,7 @@
             <li><a href="#getting-started">Getting started</a></li>
             <li><a href="#creating-a-rule">Creating a rule</a></li>
             <li><a href="#managing-rules">Managing rules</a></li>
+            <li><a href="#publishing-rules">Publishing rules</a></li>
             <li><a href="#use-cases">Use cases</a></li>
           </ul>
         </nav>
@@ -287,7 +303,7 @@
     <ol>
       <li>Install Maude from the Chrome Web Store.</li>
       <li>Click the Maude icon in your toolbar to open the popup.</li>
-      <li>Click the <strong>+</strong> button to add your first rule.</li>
+      <li>Click the <strong>+</strong> button to add a rule, or <strong>Import</strong> to add one from a manifest URL.</li>
     </ol>
 
     <h2 id="creating-a-rule">Creating a rule</h2>
@@ -321,6 +337,30 @@
     <h2 id="managing-rules">Managing rules</h2>
     <p>In the rule list, use the <strong>pencil</strong> icon to edit a rule. Use the <strong>bin</strong> icon to delete it; you'll be asked to confirm first.</p>
     <p class="tip">If you added the script by uploading a file or fetching from a URL, you'll need to repeat this if you want to update the script (Maude doesn't re-read the source).</p>
+
+    <h2 id="publishing-rules">Publishing rules</h2>
+    <p>You can share a rule by publishing a <strong>manifest</strong> and script file. Others can add your rule by clicking <strong>Import</strong> in Maude and entering the manifest URL.</p>
+    <p>Host two files on the same path (e.g. on GitHub Pages or any static host):</p>
+    <ul>
+      <li><strong>manifest.json</strong> - JSON describing the rule (name, URL matcher, script filename, and optional timing).</li>
+      <li>Your <strong>script file</strong> - the JavaScript to inject (referenced by filename in the manifest).</li>
+    </ul>
+    <p>Manifest format:</p>
+    <ul>
+      <li><code>name</code> - Rule name (string).</li>
+      <li><code>matches</code> - Single URL pattern, wildcard or regex (string).</li>
+      <li><code>js</code> - Single script filename (relative to the manifest URL) or full URL (string).</li>
+      <li>Optional: <code>matcherMode</code> - <code>"wildcard"</code> or <code>"regex"</code> (default wildcard).</li>
+      <li>Optional: <code>delaySeconds</code> - Delay before injection (number).</li>
+      <li>Optional: <code>injectionCondition</code> - JavaScript expression that must be truthy before injection (string).</li>
+    </ul>
+    <p>Example <code>manifest.json</code>:</p>
+    <pre><code>{
+  "name": "My rule",
+  "matches": "https://example.com/*",
+  "js": "my-script.js"
+}</code></pre>
+    <p>If <code>manifest.json</code> is at <code>https://yoursite.com/maude-rule/manifest.json</code> and <code>my-script.js</code> is in the same directory, Maude will fetch the manifest and then the script from <code>https://yoursite.com/maude-rule/my-script.js</code>. Users can review and edit the imported rule before saving.</p>
 
     <h2 id="use-cases">Use cases</h2>
     <ul>

@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Maude",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "A browser extension for modding web pages and web apps.",
   "icons": {
     "16": "icons/icon16.png",
