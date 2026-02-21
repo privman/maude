@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Maude</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <header class="header">
+    <h1 class="title">Maude</h1>
+    <button type="button" class="btn btn-add" id="btn-add" title="Add rule">+</button>
+  </header>
+
+  <main class="main">
+    <ul class="rule-list" id="rule-list"></ul>
+
+    <section class="form-section hidden" id="form-section">
+      <h2 class="form-title" id="form-title">New rule</h2>
+
+      <div class="field">
+        <label for="rule-name">Name</label>
+        <input type="text" id="rule-name" placeholder="(unnamed)">
+      </div>
+
+      <div class="field">
+        <label>URL matcher</label>
+        <div class="matcher-row">
+          <select id="matcher-mode">
+            <option value="wildcard">Wildcard</option>
+            <option value="regex">Regex</option>
+          </select>
+          <input type="text" id="matcher-pattern" placeholder="URL pattern" class="matcher-pattern">
+        </div>
+        <p class="hint">Wildcard: <code>?</code> = one char, <code>*</code> = any sequence. Regex: full JavaScript regex.</p>
+      </div>
+
+      <div class="field">
+        <label>Script</label>
+        <div class="script-tabs">
+          <button type="button" class="tab active" data-source="paste">Paste</button>
+          <button type="button" class="tab" data-source="upload">Upload</button>
+          <button type="button" class="tab" data-source="url">From URL</button>
+        </div>
+        <div class="script-panel script-paste active" data-panel="paste">
+          <textarea id="script-paste" rows="8" placeholder="Paste JavaScript here…"></textarea>
+        </div>
+        <div class="script-panel script-upload hidden" data-panel="upload">
+          <input type="file" id="script-file" accept=".js,application/javascript">
+          <pre class="script-preview" id="script-upload-preview"></pre>
+        </div>
+        <div class="script-panel script-url hidden" data-panel="url">
+          <input type="url" id="script-url" placeholder="https://example.com/script.js">
+          <p class="hint warn">Only use trusted sources.</p>
+        </div>
+      </div>
+
+      <div class="field injection-timing">
+        <label>Injection timing</label>
+        <div class="timing-row">
+          <label class="inline">
+            Delay (seconds)
+            <input type="number" id="delay-seconds" min="0" step="0.5" placeholder="0">
+          </label>
+        </div>
+        <div class="timing-row">
+          <label class="inline">Condition (runs in page; inject when it returns true)</label>
+          <textarea id="injection-condition" rows="3" placeholder="// e.g. document.querySelector('.app')"></textarea>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button type="button" class="btn btn-secondary" id="btn-cancel">Cancel</button>
+        <button type="button" class="btn btn-primary" id="btn-save">Save</button>
+      </div>
+    </section>
+  </main>
+
+  <script src="popup.js"></script>
+</body>
+</html>

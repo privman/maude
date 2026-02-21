@@ -1,0 +1,15 @@
+{
+  "manifest_version": 3,
+  "name": "Maude",
+  "version": "1.0.0",
+  "description": "A browser extension for modding web pages and web apps.",
+  "permissions": ["storage", "activeTab", "scripting"],
+  "host_permissions": ["<all_urls>"],
+  "action": {
+    "default_popup": "popup/popup.html",
+    "default_title": "Maude"
+  },
+  "background": {
+    "service_worker": "background.js"
+  }
+}

@@ -1,0 +1,313 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 13px;
+  margin: 0;
+  min-width: 360px;
+  max-width: 420px;
+  min-height: 320px;
+  color: #1a1a1a;
+  background: #f8f9fa;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 14px;
+  background: #2d2d2d;
+  color: #fff;
+}
+
+.title {
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 600;
+}
+
+.btn {
+  border: none;
+  cursor: pointer;
+  font-size: inherit;
+  border-radius: 6px;
+  padding: 6px 12px;
+}
+
+.btn-add {
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  font-size: 1.4rem;
+  line-height: 1;
+  background: #4a9eff;
+  color: #fff;
+}
+
+.btn-add:hover {
+  background: #3a8eef;
+}
+
+.main {
+  padding: 10px 14px 14px;
+}
+
+.rule-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.rule-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  margin-bottom: 8px;
+}
+
+.rule-item .name {
+  flex: 1;
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.rule-item .pattern {
+  flex: 1;
+  font-size: 11px;
+  color: #666;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.rule-item .actions {
+  display: flex;
+  gap: 4px;
+}
+
+.rule-item .btn-icon {
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  background: transparent;
+  color: #666;
+}
+
+.rule-item .btn-icon:hover {
+  background: #eee;
+  color: #333;
+}
+
+.rule-item .btn-icon.delete:hover {
+  background: #fee;
+  color: #c33;
+}
+
+.form-section {
+  margin-top: 14px;
+  padding: 14px;
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+}
+
+.form-section.hidden {
+  display: none;
+}
+
+.form-title {
+  margin: 0 0 12px;
+  font-size: 1rem;
+}
+
+.field {
+  margin-bottom: 12px;
+}
+
+.field label {
+  display: block;
+  margin-bottom: 4px;
+  font-weight: 500;
+  color: #333;
+}
+
+.field .hint {
+  margin: 4px 0 0;
+  font-size: 11px;
+  color: #666;
+}
+
+.field .hint.warn {
+  color: #b8860b;
+}
+
+.field input[type="text"],
+.field input[type="number"],
+.field input[type="url"],
+.field textarea,
+.field select {
+  width: 100%;
+  padding: 6px 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font: inherit;
+}
+
+.field textarea {
+  resize: vertical;
+  font-family: ui-monospace, monospace;
+  font-size: 12px;
+}
+
+.matcher-row {
+  display: flex;
+  gap: 8px;
+}
+
+.matcher-row select {
+  width: 100px;
+  flex-shrink: 0;
+}
+
+.matcher-pattern {
+  flex: 1;
+  min-width: 0;
+}
+
+.script-tabs {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 8px;
+}
+
+.script-tabs .tab {
+  padding: 6px 12px;
+  border: 1px solid #ccc;
+  background: #fff;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.script-tabs .tab.active {
+  background: #2d2d2d;
+  color: #fff;
+  border-color: #2d2d2d;
+}
+
+.script-panel {
+  display: none;
+}
+
+.script-panel.active {
+  display: block;
+}
+
+.script-panel.hidden {
+  display: none;
+}
+
+.script-panel textarea {
+  width: 100%;
+}
+
+.script-panel pre.script-preview {
+  margin: 8px 0 0;
+  padding: 8px;
+  background: #f5f5f5;
+  border-radius: 4px;
+  font-size: 11px;
+  max-height: 120px;
+  overflow: auto;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+.timing-row {
+  margin-bottom: 8px;
+}
+
+.timing-row .inline {
+  display: block;
+  margin-bottom: 4px;
+}
+
+.timing-row input[type="number"] {
+  width: 80px;
+  margin-left: 8px;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid #eee;
+}
+
+.btn-primary {
+  background: #2d2d2d;
+  color: #fff;
+}
+
+.btn-primary:hover {
+  background: #1a1a1a;
+}
+
+.btn-secondary {
+  background: #e0e0e0;
+  color: #333;
+}
+
+.btn-secondary:hover {
+  background: #d0d0d0;
+}
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+
+.modal {
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  max-width: 320px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+}
+
+.modal p {
+  margin: 0 0 16px;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.modal .btn-danger {
+  background: #c33;
+  color: #fff;
+}
+
+.modal .btn-danger:hover {
+  background: #a22;
+}
