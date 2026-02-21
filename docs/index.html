@@ -185,6 +185,20 @@
       list-style: none;
       padding: 0;
       margin: 0;
+      overflow: hidden;
+    }
+
+    .sidebar .back-to-top {
+      transform: translateY(-100%);
+      opacity: 0;
+      pointer-events: none;
+      transition: transform 0.2s ease, opacity 0.2s ease;
+    }
+
+    body.scrolled .sidebar .back-to-top {
+      transform: translateY(0);
+      opacity: 1;
+      pointer-events: auto;
     }
 
     .sidebar .toc a {
@@ -192,6 +206,10 @@
       padding: 0.35rem 0;
       font-size: 0.9rem;
       color: var(--color-text-muted);
+    }
+
+    .sidebar .toc li:not(.back-to-top) a {
+      padding-left: 7px;
     }
 
     .sidebar .toc a:hover {
@@ -258,7 +276,7 @@
     }
   </style>
 </head>
-<body>
+<body id="top">
   <header>
     <div class="header-wrap">
       <img src="https://github.com/privman/maude/raw/main/icons/icon48.png" alt="" width="48" height="48">
@@ -273,7 +291,7 @@
     <aside class="sidebar">
       <nav class="toc" aria-label="Contents">
         <ul>
-          <li><a href="#top"><span class="material-icons">arrow_up</span> Back to top</a></li>
+          <li class="back-to-top" id="back-to-top-item"><a href="#top"><span class="material-icons">arrow_up</span> Back to top</a></li>
           <li><a href="#getting-started">Getting started</a></li>
           <li><a href="#creating-a-rule">Creating a rule</a></li>
           <li><a href="#managing-rules">Managing rules</a></li>
@@ -342,7 +360,7 @@
     <p>You can share a rule by publishing a <strong>manifest</strong> and script file. Others can add your rule by clicking <strong>Import</strong> in Maude and entering the manifest URL.</p>
     <p>Host two files on the same path (e.g. on GitHub Pages or any static host):</p>
     <ul>
-      <li><strong>manifest.json</strong> - JSON describing the rule (name, URL matcher, script filename, and optional timing).</li>
+      <li><strong>maude.json</strong> - JSON describing the rule (name, URL matcher, script filename, and optional timing).</li>
       <li>Your <strong>script file</strong> - the JavaScript to inject (referenced by filename in the manifest).</li>
     </ul>
     <p>Manifest format:</p>
@@ -354,13 +372,13 @@
       <li>Optional: <code>delaySeconds</code> - Delay before injection (number).</li>
       <li>Optional: <code>injectionCondition</code> - JavaScript expression that must be truthy before injection (string).</li>
     </ul>
-    <p>Example <code>manifest.json</code>:</p>
+    <p>Example <code>maude.json</code>:</p>
     <pre><code>{
   "name": "My rule",
   "matches": "https://example.com/*",
   "js": "my-script.js"
 }</code></pre>
-    <p>If <code>manifest.json</code> is at <code>https://yoursite.com/maude-rule/manifest.json</code> and <code>my-script.js</code> is in the same directory, Maude will fetch the manifest and then the script from <code>https://yoursite.com/maude-rule/my-script.js</code>. Users can review and edit the imported rule before saving.</p>
+    <p>If <code>maude.json</code> is at <code>https://yoursite.com/maude-rule/maude.json</code> and <code>my-script.js</code> is in the same directory, Maude will fetch the rule manifest and then the script from <code>https://yoursite.com/maude-rule/my-script.js</code>. Users can review and edit the imported rule before saving.</p>
 
     <h2 id="use-cases">Use cases</h2>
     <ul>
@@ -378,5 +396,15 @@
   </main>
     </div>
   </div>
+  <script>
+    (function () {
+      var scrollThreshold = 60;
+      function updateScrolled() {
+        document.body.classList.toggle('scrolled', window.scrollY > scrollThreshold);
+      }
+      window.addEventListener('scroll', updateScrolled, { passive: true });
+      updateScrolled();
+    })();
+  </script>
 </body>
 </html>
