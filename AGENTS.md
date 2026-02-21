@@ -4,7 +4,7 @@ Conventions and decisions that are useful to keep when working on this repo.
 
 ## Project
 
-- **Maude** is a Chrome extension for injecting user scripts into pages based on URL rules. Side panel manages rules; background script matches URLs and injects (with optional delay and/or condition). Script and condition run in page context via Trusted Types when available.
+- **Maude** is a Chrome extension for injecting user scripts into pages based on URL matching. Side panel manages maudes (injection rules); background script matches URLs and injects (with optional delay and/or condition). Script and condition run in page context via Trusted Types.
 
 ## Code style
 

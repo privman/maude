@@ -13,11 +13,11 @@
     <img src="../icons/icon32.png" alt="" class="header-icon" width="24" height="24">
     <h1 class="title">Maude</h1>
     <button type="button" class="btn btn-secondary btn-import" id="btn-import" title="Import from URL">Import</button>
-    <button type="button" class="btn btn-add" id="btn-add" title="Add rule">+</button>
+    <button type="button" class="btn btn-add" id="btn-add" title="Add maude">+</button>
   </header>
 
   <main class="main">
-    <ul class="rule-list" id="rule-list"></ul>
+    <ul class="maude-list" id="maude-list"></ul>
 
     <section class="import-section hidden" id="import-section">
       <div class="section-header">
@@ -32,7 +32,7 @@
 
     <section class="form-section hidden" id="form-section">
       <div class="section-header">
-        <h2 class="form-title section-title" id="form-title">New rule</h2>
+        <h2 class="form-title section-title" id="form-title">New maude</h2>
         <div class="section-actions">
           <button type="button" class="btn btn-secondary" id="btn-cancel">Cancel</button>
           <button type="button" class="btn btn-primary" id="btn-save">Save</button>
@@ -40,8 +40,8 @@
       </div>
 
       <div class="field">
-        <label for="rule-name">Name</label>
-        <input type="text" id="rule-name" placeholder="(unnamed)">
+        <label for="maude-name">Name</label>
+        <input type="text" id="maude-name" placeholder="(unnamed)">
       </div>
 
       <div class="field url-matcher">

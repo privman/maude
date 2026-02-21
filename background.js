@@ -1,6 +1,6 @@
-const STORAGE_KEY = 'maude_rules';
+const STORAGE_KEY = 'maudes';
 
-function loadRules() {
+function loadMaudes() {
   return new Promise((resolve) => {
     chrome.storage.local.get([STORAGE_KEY], (data) => {
       resolve(data[STORAGE_KEY] || []);
@@ -16,13 +16,13 @@ function wildcardToRegex(pattern) {
   return new RegExp('^' + escaped + '$');
 }
 
-function urlMatchesRule(url, rule) {
-  if (!rule.matcher) return false;
+function urlMatchesMaude(url, maude) {
+  if (!maude.matcher) return false;
   try {
-    if (rule.matcherMode === 'regex') {
-      return new RegExp(rule.matcher).test(url);
+    if (maude.matcherMode === 'regex') {
+      return new RegExp(maude.matcher).test(url);
     }
-    return wildcardToRegex(rule.matcher).test(url);
+    return wildcardToRegex(maude.matcher).test(url);
   } catch (_) {
     return false;
   }
@@ -67,18 +67,18 @@ async function runCondition(tabId, conditionCode) {
   }
 }
 
-function scheduleInjection(tabId, rule) {
-  const delayMs = (rule.delaySeconds != null && rule.delaySeconds > 0)
-    ? rule.delaySeconds * 1000
+function scheduleInjection(tabId, maude) {
+  const delayMs = (maude.delaySeconds != null && maude.delaySeconds > 0)
+    ? maude.delaySeconds * 1000
     : 0;
-  const hasCondition = !!(rule.injectionCondition && rule.injectionCondition.trim());
+  const hasCondition = !!(maude.injectionCondition && maude.injectionCondition.trim());
 
-  function doInject(content = rule.scriptContent) {
+  function doInject(content = maude.scriptContent) {
     injectScript(tabId, content);
   }
 
   function checkConditionThenInject() {
-    runCondition(tabId, rule.injectionCondition).then((ok) => {
+    runCondition(tabId, maude.injectionCondition).then((ok) => {
       if (ok) {
         doInject();
       } else if (delayMs > 0) {
@@ -108,10 +108,10 @@ async function onTabUpdated(tabId, changeInfo, tab) {
   const url = tab.url;
   if (url.startsWith('chrome://') || url.startsWith('chrome-extension://')) return;
 
-  const rules = await loadRules();
-  for (const rule of rules) {
-    if (urlMatchesRule(url, rule)) {
-      scheduleInjection(tabId, rule);
+  const maudes = await loadMaudes();
+  for (const maude of maudes) {
+    if (urlMatchesMaude(url, maude)) {
+      scheduleInjection(tabId, maude);
     }
   }
 }

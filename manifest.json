@@ -9,7 +9,6 @@
     "48": "icons/icon48.png",
     "128": "icons/icon128.png"
   },
-  "theme_color": "#264239",
   "permissions": [
     "storage",
     "activeTab",

@@ -91,17 +91,17 @@ body {
   min-height: 0;
 }
 
-.rule-list {
+.maude-list {
   list-style: none;
   margin: 0;
   padding: 0;
 }
 
-.rule-list.hidden {
+.maude-list.hidden {
   display: none;
 }
 
-.rule-item {
+.maude-item {
   display: flex;
   align-items: center;
   gap: 6px;
@@ -112,7 +112,7 @@ body {
   margin-bottom: 6px;
 }
 
-.rule-item .name {
+.maude-item .name {
   flex: 1;
   font-weight: 500;
   overflow: hidden;
@@ -120,7 +120,7 @@ body {
   white-space: nowrap;
 }
 
-.rule-item .pattern {
+.maude-item .pattern {
   flex: 1;
   font-size: 10px;
   color: var(--color-text-muted);
@@ -129,12 +129,12 @@ body {
   white-space: nowrap;
 }
 
-.rule-item .actions {
+.maude-item .actions {
   display: flex;
   gap: 2px;
 }
 
-.rule-item .btn-icon {
+.maude-item .btn-icon {
   width: 26px;
   height: 26px;
   padding: 0;
@@ -148,16 +148,16 @@ body {
   justify-content: center;
 }
 
-.rule-item .btn-icon .material-icons {
+.maude-item .btn-icon .material-icons {
   font-size: 18px;
 }
 
-.rule-item .btn-icon:hover {
+.maude-item .btn-icon:hover {
   background: var(--color-icon-hover-bg);
   color: var(--color-text-strong);
 }
 
-.rule-item .btn-icon.delete:hover {
+.maude-item .btn-icon.delete:hover {
   background: var(--color-danger-bg-hover);
   color: var(--color-danger);
 }

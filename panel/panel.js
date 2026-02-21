@@ -1,13 +1,13 @@
 (function () {
-  const STORAGE_KEY = 'maude_rules';
-  const ruleListEl = document.getElementById('rule-list');
+  const STORAGE_KEY = 'maudes';
+  const maudeListEl = document.getElementById('maude-list');
   const formSection = document.getElementById('form-section');
   const formTitle = document.getElementById('form-title');
   const btnAdd = document.getElementById('btn-add');
   const btnImport = document.getElementById('btn-import');
   const btnCancel = document.getElementById('btn-cancel');
   const btnSave = document.getElementById('btn-save');
-  const ruleName = document.getElementById('rule-name');
+  const maudeName = document.getElementById('maude-name');
   const matcherMode = document.getElementById('matcher-mode');
   const matcherPattern = document.getElementById('matcher-pattern');
   const scriptEditor = document.getElementById('script-editor');
@@ -25,7 +25,7 @@
   const importCancelBtn = document.getElementById('import-cancel');
   const importLoadBtn = document.getElementById('import-load');
 
-  let rules = [];
+  let maudes = [];
   let editingId = null;
   let prefillUrl = null;
 
@@ -35,7 +35,7 @@
 
   function getNextUnnamedIndex() {
     let max = 0;
-    rules.forEach((r) => {
+    maudes.forEach((r) => {
       const m = r.name.match(/^\(unnamed(?: (\d+))?\)$/);
       if (m) max = Math.max(max, m[1] ? parseInt(m[1], 10) : 1);
     });
@@ -47,18 +47,18 @@
     return n === 1 ? '(unnamed)' : '(unnamed ' + n + ')';
   }
 
-  function loadRules() {
+  function loadMaudes() {
     return new Promise((resolve) => {
       chrome.storage.local.get([STORAGE_KEY], (data) => {
-        rules = data[STORAGE_KEY] || [];
+        maudes = data[STORAGE_KEY] || [];
         resolve();
       });
     });
   }
 
-  function saveRules() {
+  function saveMaudes() {
     return new Promise((resolve) => {
-      chrome.storage.local.set({ [STORAGE_KEY]: rules }, resolve);
+      chrome.storage.local.set({ [STORAGE_KEY]: maudes }, resolve);
     });
   }
 
@@ -69,23 +69,23 @@
     }
   });
 
-  function renderRuleList() {
-    ruleListEl.innerHTML = '';
-    rules.forEach((rule) => {
+  function renderMaudeList() {
+    maudeListEl.innerHTML = '';
+    maudes.forEach((maude) => {
       const li = document.createElement('li');
-      li.className = 'rule-item';
-      li.dataset.ruleId = rule.id;
+      li.className = 'maude-item';
+      li.dataset.maudeId = maude.id;
       li.innerHTML = `
-        <span class="name" title="${escapeHtml(rule.name)}">${escapeHtml(rule.name)}</span>
-        <span class="pattern" title="${escapeHtml(rule.matcher)}">${escapeHtml(rule.matcher)}</span>
+        <span class="name" title="${escapeHtml(maude.name)}">${escapeHtml(maude.name)}</span>
+        <span class="pattern" title="${escapeHtml(maude.matcher)}">${escapeHtml(maude.matcher)}</span>
         <div class="actions">
-          <button type="button" class="btn-icon edit" title="Edit" data-id="${escapeHtml(rule.id)}"><span class="material-icons">edit</span></button>
-          <button type="button" class="btn-icon delete" title="Delete" data-id="${escapeHtml(rule.id)}"><span class="material-icons">delete</span></button>
+          <button type="button" class="btn-icon edit" title="Edit" data-id="${escapeHtml(maude.id)}"><span class="material-icons">edit</span></button>
+          <button type="button" class="btn-icon delete" title="Delete" data-id="${escapeHtml(maude.id)}"><span class="material-icons">delete</span></button>
         </div>
       `;
-      li.querySelector('.edit').addEventListener('click', () => openForm(rule.id));
-      li.querySelector('.delete').addEventListener('click', () => confirmDelete(rule.id));
-      ruleListEl.appendChild(li);
+      li.querySelector('.edit').addEventListener('click', () => openForm(maude.id));
+      li.querySelector('.delete').addEventListener('click', () => confirmDelete(maude.id));
+      maudeListEl.appendChild(li);
     });
   }
 
@@ -123,8 +123,8 @@
   }
 
   function applyFormData(data) {
-    ruleName.value = data.name;
-    ruleName.placeholder = getDefaultName();
+    maudeName.value = data.name;
+    maudeName.placeholder = getDefaultName();
     matcherMode.value = data.matcherMode || 'wildcard';
     matcherPattern.value = data.matcher || '';
     scriptEditor.value = data.scriptContent || '';
@@ -139,38 +139,38 @@
     return scriptEditor.value;
   }
 
-  function setScriptContentForEdit(rule) {
-    scriptEditor.value = rule.scriptContent || '';
+  function setScriptContentForEdit(maude) {
+    scriptEditor.value = maude.scriptContent || '';
     scriptUrl.value = '';
     scriptFile.value = '';
     closeScriptUrlRow();
   }
 
-  function showRuleList() {
-    ruleListEl.classList.remove('hidden');
+  function showMaudeList() {
+    maudeListEl.classList.remove('hidden');
     importSection.classList.add('hidden');
     formSection.classList.add('hidden');
   }
 
-  function openForm(ruleId = null, options = null) {
-    editingId = ruleId;
-    ruleListEl.classList.add('hidden');
+  function openForm(maudeId = null, options = null) {
+    editingId = maudeId;
+    maudeListEl.classList.add('hidden');
     importSection.classList.add('hidden');
     formSection.classList.remove('hidden');
-    formTitle.textContent = ruleId ? 'Edit rule' : 'New rule';
+    formTitle.textContent = maudeId ? 'Edit maude' : 'New maude';
 
-    if (ruleId) {
-      const rule = rules.find((r) => r.id === ruleId);
-      if (!rule) return;
-      ruleName.value = rule.name;
-      matcherMode.value = rule.matcherMode || 'wildcard';
-      matcherPattern.value = rule.matcher || '';
-      delaySeconds.value = rule.delaySeconds != null && rule.delaySeconds !== '' ? rule.delaySeconds : '';
-      injectionCondition.value = rule.injectionCondition || '';
-      setScriptContentForEdit(rule);
+    if (maudeId) {
+      const maude = maudes.find((r) => r.id === maudeId);
+      if (!maude) return;
+      maudeName.value = maude.name;
+      matcherMode.value = maude.matcherMode || 'wildcard';
+      matcherPattern.value = maude.matcher || '';
+      delaySeconds.value = maude.delaySeconds != null && maude.delaySeconds !== '' ? maude.delaySeconds : '';
+      injectionCondition.value = maude.injectionCondition || '';
+      setScriptContentForEdit(maude);
     } else {
-      ruleName.value = '';
-      ruleName.placeholder = getDefaultName();
+      maudeName.value = '';
+      maudeName.placeholder = getDefaultName();
       matcherMode.value = 'wildcard';
       matcherPattern.value = '';
       scriptEditor.value = '';
@@ -190,11 +190,11 @@
   function closeForm() {
     formSection.classList.add('hidden');
     editingId = null;
-    showRuleList();
+    showMaudeList();
   }
 
   async function saveFromForm() {
-    const name = ruleName.value.trim() || ruleName.placeholder || getDefaultName();
+    const name = maudeName.value.trim() || maudeName.placeholder || getDefaultName();
     const delay = delaySeconds.value === '' ? undefined : parseFloat(delaySeconds.value, 10);
     const data = {
       name,
@@ -207,24 +207,24 @@
     try {
       data.scriptContent = getScriptContentFromForm();
       if (editingId) {
-        const rule = rules.find((r) => r.id === editingId);
-        if (rule) Object.assign(rule, data);
+        const maude = maudes.find((r) => r.id === editingId);
+        if (maude) Object.assign(maude, data);
       } else {
-        rules.push({ id: generateId(), ...data });
+        maudes.push({ id: generateId(), ...data });
       }
-      saveRules();
-      renderRuleList();
+      saveMaudes();
+      renderMaudeList();
       closeForm();
     } catch (err) {
       alert('Failed to get script: ' + (err.message || err));
     }
   }
 
-  function confirmDelete(ruleId) {
-    const rule = rules.find((r) => r.id === ruleId);
-    const name = rule ? rule.name : 'this rule';
-    const ruleLi = ruleListEl.querySelector(`.rule-item[data-rule-id="${CSS.escape(ruleId)}"]`);
-    if (!ruleLi) return;
+  function confirmDelete(maudeId) {
+    const maude = maudes.find((r) => r.id === maudeId);
+    const name = maude ? maude.name : 'this maude';
+    const maudeLi = maudeListEl.querySelector(`.maude-item[data-maude-id="${CSS.escape(maudeId)}"]`);
+    if (!maudeLi) return;
     const confirmLi = document.createElement('li');
     confirmLi.className = 'delete-confirm-row';
     confirmLi.innerHTML = `
@@ -237,12 +237,12 @@
     const removeConfirm = () => confirmLi.remove();
     confirmLi.querySelector('.delete-confirm-cancel').addEventListener('click', removeConfirm);
     confirmLi.querySelector('.delete-confirm-submit').addEventListener('click', () => {
-      rules = rules.filter((r) => r.id !== ruleId);
-      saveRules().then(() => {
-        renderRuleList();
+      maudes = maudes.filter((r) => r.id !== maudeId);
+      saveMaudes().then(() => {
+        renderMaudeList();
       });
     });
-    ruleLi.after(confirmLi);
+    maudeLi.after(confirmLi);
   }
 
   function closeScriptUrlRow() {
@@ -290,7 +290,7 @@
 
   btnImport.addEventListener('click', () => {
     importUrlInput.value = prefillUrl || '';
-    ruleListEl.classList.add('hidden');
+    maudeListEl.classList.add('hidden');
     formSection.classList.add('hidden');
     importSection.classList.remove('hidden');
     importUrlInput.focus();
@@ -298,7 +298,7 @@
 
   importCancelBtn.addEventListener('click', () => {
     importSection.classList.add('hidden');
-    showRuleList();
+    showMaudeList();
   });
 
   importLoadBtn.addEventListener('click', () => {
@@ -333,7 +333,7 @@
     }
   });
 
-  loadRules().then(() => {
-    renderRuleList();
+  loadMaudes().then(() => {
+    renderMaudeList();
   });
 })();

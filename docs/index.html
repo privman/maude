@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Maude – Mod the web</title>
+  <title>Maude - Mod the web</title>
   <meta name="description" content="A browser extension for injecting your own scripts into web pages based on URL rules. Mod web pages and web apps the way you want.">
   <link rel="icon" href="https://github.com/privman/maude/raw/main/icons/icon32.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -282,7 +282,7 @@
       <img src="https://github.com/privman/maude/raw/main/icons/icon48.png" alt="" width="48" height="48">
       <div>
         <h1>Maude</h1>
-        <p>Mod the web. Inject your own scripts into any page based on URL rules.</p>
+        <p>Mod the web. Inject your own scripts into any page based on URL maudes.</p>
       </div>
     </div>
   </header>
@@ -293,9 +293,9 @@
         <ul>
           <li class="back-to-top" id="back-to-top-item"><a href="#top"><span class="material-icons">arrow_up</span> Back to top</a></li>
           <li><a href="#getting-started">Getting started</a></li>
-          <li><a href="#creating-a-rule">Creating a rule</a></li>
-          <li><a href="#managing-rules">Managing rules</a></li>
-          <li><a href="#publishing-rules">Publishing rules</a></li>
+          <li><a href="#creating-a-maude">Creating a maude</a></li>
+          <li><a href="#managing-maudes">Managing maudes</a></li>
+          <li><a href="#publishing-maudes">Publishing maudes</a></li>
           <li><a href="#use-cases">Use cases</a></li>
         </ul>
       </nav>
@@ -306,25 +306,25 @@
         <nav class="toc" aria-label="Contents">
           <ul>
             <li><a href="#getting-started">Getting started</a></li>
-            <li><a href="#creating-a-rule">Creating a rule</a></li>
-            <li><a href="#managing-rules">Managing rules</a></li>
-            <li><a href="#publishing-rules">Publishing rules</a></li>
+            <li><a href="#creating-a-maude">Creating a maude</a></li>
+            <li><a href="#managing-maudes">Managing maudes</a></li>
+            <li><a href="#publishing-maudes">Publishing maudes</a></li>
             <li><a href="#use-cases">Use cases</a></li>
           </ul>
         </nav>
       </details>
 
   <main class="wrap">
-    <p>Maude is a browser extension that lets you run custom JavaScript on specific websites. Define rules that match URLs (by wildcard or regex), add a script, and optional timing—delay and/or a condition that must be true before injection. Your script runs in the page context, so you can change layout, add features, or automate actions.</p>
+    <p>Maude is a browser extension that lets you run custom JavaScript on specific websites. Define maudes that match URLs (by wildcard or regex), add a script, and optional timing—delay and/or a condition that must be true before injection. Your script runs in the page context, so you can change layout, add features, or automate actions.</p>
 
     <h2 id="getting-started">Getting started</h2>
     <ol>
       <li>Install Maude from the Chrome Web Store.</li>
       <li>Click the Maude icon in your toolbar to open the side panel.</li>
-      <li>Click the <strong>+</strong> button to add a rule, or <strong>Import</strong> to add one from a manifest URL.</li>
+      <li>Click the <strong>+</strong> button to add a maude, or <strong>Import</strong> to add one from a manifest URL.</li>
     </ol>
 
-    <h2 id="creating-a-rule">Creating a rule</h2>
+    <h2 id="creating-a-maude">Creating a maude</h2>
 
     <h3>Name</h3>
     <p>Kind of self-explanatory.</p>
@@ -352,20 +352,20 @@
         If you also set a delay, the condition is checked repeatedly at that interval until it passes.</li>
     </ul>
 
-    <h2 id="managing-rules">Managing rules</h2>
-    <p>In the rule list, use the <strong>pencil</strong> icon to edit a rule. Use the <strong>bin</strong> icon to delete it; you'll be asked to confirm first.</p>
+    <h2 id="managing-maudes">Managing maudes</h2>
+    <p>In the maude list, use the <strong>pencil</strong> icon to edit a maude. Use the <strong>bin</strong> icon to delete it; you'll be asked to confirm first.</p>
     <p class="tip">If you added the script by uploading a file or fetching from a URL, you'll need to repeat this if you want to update the script (Maude doesn't re-read the source).</p>
 
-    <h2 id="publishing-rules">Publishing rules</h2>
-    <p>You can share a rule by publishing a <strong>manifest</strong> and script file. Others can add your rule by clicking <strong>Import</strong> in Maude and entering the manifest URL.</p>
+    <h2 id="publishing-maudes">Publishing maudes</h2>
+    <p>You can share a maude by publishing a <strong>manifest</strong> and script file. Others can add your maude by clicking <strong>Import</strong> in Maude and entering the manifest URL.</p>
     <p>Host two files on the same path (e.g. on GitHub Pages or any static host):</p>
     <ul>
-      <li><strong>maude.json</strong> - JSON describing the rule (name, URL matcher, script filename, and optional timing).</li>
+      <li><strong>maude.json</strong> - JSON describing the maude (name, URL matcher, script filename, and optional timing).</li>
       <li>Your <strong>script file</strong> - the JavaScript to inject (referenced by filename in the manifest).</li>
     </ul>
     <p>Manifest format:</p>
     <ul>
-      <li><code>name</code> - Rule name (string).</li>
+      <li><code>name</code> - Maude name (string).</li>
       <li><code>matches</code> - Single URL pattern, wildcard or regex (string).</li>
       <li><code>js</code> - Single script filename (relative to the manifest URL) or full URL (string).</li>
       <li>Optional: <code>matcherMode</code> - <code>"wildcard"</code> or <code>"regex"</code> (default wildcard).</li>
@@ -374,11 +374,11 @@
     </ul>
     <p>Example <code>maude.json</code>:</p>
     <pre><code>{
-  "name": "My rule",
+  "name": "My maude",
   "matches": "https://example.com/*",
   "js": "my-script.js"
 }</code></pre>
-    <p>If <code>maude.json</code> is at <code>https://yoursite.com/maude-rule/maude.json</code> and <code>my-script.js</code> is in the same directory, Maude will fetch the rule manifest and then the script from <code>https://yoursite.com/maude-rule/my-script.js</code>. Users can review and edit the imported rule before saving.</p>
+    <p>If <code>maude.json</code> is at <code>https://yoursite.com/maude/maude.json</code> and <code>my-script.js</code> is in the same directory, Maude will fetch the maude manifest and then the script from <code>https://yoursite.com/maude/my-script.js</code>. Users can review and edit the imported maude before saving.</p>
 
     <h2 id="use-cases">Use cases</h2>
     <ul>
