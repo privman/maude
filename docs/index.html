@@ -405,9 +405,9 @@
   </div>
   <script>
     (function () {
-      var scrollThreshold = 60;
+      var headerHeight = 152;
       function updateScrolled() {
-        document.body.classList.toggle('scrolled', window.scrollY > scrollThreshold);
+        document.body.classList.toggle('scrolled', window.scrollY >= headerHeight);
       }
       window.addEventListener('scroll', updateScrolled, { passive: true });
       updateScrolled();
