@@ -35,10 +35,9 @@ function injectScript(tabId, scriptContent) {
     target: { tabId },
     world: 'MAIN',
     func: (code) => {
-      const blob = new Blob([code], { type: 'application/javascript' });
-      const url = URL.createObjectURL(blob);
+      const policy = trustedTypes.createPolicy('maude', { createScript: (s) => s });
       const script = document.createElement('script');
-      script.src = url;
+      script.textContent = policy.createScript(code);
       document.documentElement.appendChild(script);
     },
     args: [scriptContent],
@@ -54,7 +53,8 @@ async function runCondition(tabId, conditionCode) {
       world: 'MAIN',
       func: (code) => {
         try {
-          return !!eval(code);
+          const policy = trustedTypes.createPolicy('maude', { createScript: (s) => s });
+          return !!eval(policy.createScript(code));
         } catch (_) {
           return false;
         }
