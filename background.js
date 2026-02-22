@@ -115,6 +115,7 @@ async function onTabUpdated(tabId, changeInfo, tab) {
     }
   }
 }
+chrome.tabs.onUpdated.addListener(onTabUpdated);
 
 chrome.sidePanel.setPanelBehavior({ openPanelOnActionClick: false }).catch(() => {});
 
@@ -122,21 +123,25 @@ let panelTabId = null;
 let panelPort = null;
 let panelUrl = null;
 
-chrome.runtime.onConnect.addListener((port) => {
+function onPanelDisconnect() {
+  panelPort = null;
+}
+
+function onConnect(port) {
   if (port.name !== 'maude-panel') return;
   panelPort = port;
   if (panelUrl != null) port.postMessage({ type: 'pageUrl', url: panelUrl });
-  port.onDisconnect.addListener(() => {
-    panelPort = null;
-  });
-});
+  port.onDisconnect.addListener(onPanelDisconnect);
+}
 
-chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
+function onMessage(msg, sender, sendResponse) {
   if (msg.type === 'pageUrl' && sender.tab && sender.tab.id === panelTabId) {
     panelUrl = msg.url || null;
     if (panelPort) panelPort.postMessage({ type: 'pageUrl', url: panelUrl });
   }
-});
+}
+chrome.runtime.onConnect.addListener(onConnect);
+chrome.runtime.onMessage.addListener(onMessage);
 
 const URL_NOTIFIER_MAIN =
   '(function(){function notify(){document.dispatchEvent(new CustomEvent("maude-url-change",{detail:location.href}));}notify();var origPush=history.pushState,origReplace=history.replaceState;history.pushState=function(){origPush.apply(this,arguments);notify();};history.replaceState=function(){origReplace.apply(this,arguments);notify();};window.addEventListener("popstate",notify);window.addEventListener("hashchange",notify);})();';
@@ -151,7 +156,7 @@ function runUrlNotifierIsolated() {
   document.addEventListener('maude-url-change', (e) => sendUrl(e.detail));
 }
 
-chrome.action.onClicked.addListener((tab) => {
+function onActionClicked(tab) {
   panelTabId = tab.id;
   panelUrl = tab.url || null;
   chrome.sidePanel.open({ windowId: tab.windowId });
@@ -162,6 +167,6 @@ chrome.action.onClicked.addListener((tab) => {
       func: runUrlNotifierIsolated,
     });
   }).catch(() => {});
-});
+}
+chrome.action.onClicked.addListener(onActionClicked);
 
-chrome.tabs.onUpdated.addListener(onTabUpdated);
