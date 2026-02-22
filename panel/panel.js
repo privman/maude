@@ -27,7 +27,6 @@
 
   let maudes = [];
   let editingId = null;
-  let prefillUrl = null;
 
   function generateId() {
     return 'r' + Date.now() + '-' + Math.random().toString(36).slice(2, 9);
@@ -61,13 +60,6 @@
       chrome.storage.local.set({ [STORAGE_KEY]: maudes }, resolve);
     });
   }
-
-  const port = chrome.runtime.connect({ name: 'maude-panel' });
-  port.onMessage.addListener((msg) => {
-    if (msg.type === 'pageUrl' && msg.url != null) {
-      prefillUrl = msg.url;
-    }
-  });
 
   function renderMaudeList() {
     maudeListEl.innerHTML = '';
@@ -127,17 +119,14 @@
     };
   }
 
-  function applyFormData(data) {
-    maudeName.value = data.name;
+  function applyFormData(maude) {
+    maudeName.value = maude.name;
     maudeName.placeholder = getDefaultName();
-    matcherMode.value = data.matcherMode || 'wildcard';
-    matcherPattern.value = data.matcher || '';
-    scriptEditor.value = data.scriptContent || '';
-    scriptUrl.value = '';
-    scriptFile.value = '';
-    closeScriptUrlRow();
-    delaySeconds.value = data.delaySeconds != null ? data.delaySeconds : '';
-    injectionCondition.value = data.injectionCondition || '';
+    matcherMode.value = maude.matcherMode || 'wildcard';
+    if (maude.matcher) matcherPattern.value = maude.matcher;
+    setScriptContentForEdit(maude);
+    delaySeconds.value = maude.delaySeconds != null ? maude.delaySeconds : '';
+    injectionCondition.value = maude.injectionCondition || '';
   }
 
   function getScriptContentFromForm() {
@@ -164,32 +153,25 @@
     formSection.classList.remove('hidden');
     formTitle.textContent = maudeId ? 'Edit maude' : 'New maude';
 
-    if (maudeId) {
-      const maude = maudes.find((r) => r.id === maudeId);
-      if (!maude) return;
-      maudeName.value = maude.name;
-      matcherMode.value = maude.matcherMode || 'wildcard';
-      matcherPattern.value = maude.matcher || '';
-      delaySeconds.value = maude.delaySeconds != null && maude.delaySeconds !== '' ? maude.delaySeconds : '';
-      injectionCondition.value = maude.injectionCondition || '';
-      setScriptContentForEdit(maude);
-    } else {
-      maudeName.value = '';
-      maudeName.placeholder = getDefaultName();
-      matcherMode.value = 'wildcard';
-      matcherPattern.value = '';
-      scriptEditor.value = '';
-      scriptUrl.value = '';
-      scriptFile.value = '';
-      closeScriptUrlRow();
-      delaySeconds.value = '';
-      injectionCondition.value = '';
-      if (options && options.importData) {
-        applyFormData(options.importData);
-      } else {
-        matcherPattern.value = prefillUrl || '';
-      }
+    let maude = {
+      name: '',
+      matcherMode: 'wildcard',
+      matcher: '',
+      delaySeconds: '',
+      injectionCondition: '',
+      scriptContent: '',
     }
+    if (maudeId) {
+      maude = maudes.find((r) => r.id === maudeId);
+      if (!maude) throw new Error('Maude not found');
+    } else if (options && options.importData) {
+      maude = options.importData;
+    } else {
+      chrome.runtime.sendMessage({ type: 'getCurrentTabUrl' }, (url) => {
+        matcherPattern.value = typeof url === 'string' ? url : '';
+      });
+    }
+    applyFormData(maude);
   }
 
   function closeForm() {
@@ -294,7 +276,9 @@
   });
 
   btnImport.addEventListener('click', () => {
-    importUrlInput.value = prefillUrl || '';
+    chrome.runtime.sendMessage({ type: 'getCurrentTabUrl' }, (url) => {
+      importUrlInput.value = typeof url === 'string' ? url : '';
+    });
     maudeListEl.classList.add('hidden');
     formSection.classList.add('hidden');
     importSection.classList.remove('hidden');
@@ -330,13 +314,6 @@
   btnAdd.addEventListener('click', () => openForm(null));
   btnCancel.addEventListener('click', closeForm);
   btnSave.addEventListener('click', saveFromForm);
-
-  document.addEventListener('visibilitychange', () => {
-    if (document.hidden) {
-      prefillUrl = null;
-      window.close();
-    }
-  });
 
   loadMaudes().then(() => {
     renderMaudeList();

@@ -117,56 +117,14 @@ async function onTabUpdated(tabId, changeInfo, tab) {
 }
 chrome.tabs.onUpdated.addListener(onTabUpdated);
 
-chrome.sidePanel.setPanelBehavior({ openPanelOnActionClick: false }).catch(() => {});
+chrome.sidePanel.setPanelBehavior({ openPanelOnActionClick: true }).catch(() => {});
 
-let panelTabId = null;
-let panelPort = null;
-let panelUrl = null;
-
-function onPanelDisconnect() {
-  panelPort = null;
-}
-
-function onConnect(port) {
-  if (port.name !== 'maude-panel') return;
-  panelPort = port;
-  if (panelUrl != null) port.postMessage({ type: 'pageUrl', url: panelUrl });
-  port.onDisconnect.addListener(onPanelDisconnect);
-}
-
-function onMessage(msg, sender, sendResponse) {
-  if (msg.type === 'pageUrl' && sender.tab && sender.tab.id === panelTabId) {
-    panelUrl = msg.url || null;
-    if (panelPort) panelPort.postMessage({ type: 'pageUrl', url: panelUrl });
-  }
-}
-chrome.runtime.onConnect.addListener(onConnect);
-chrome.runtime.onMessage.addListener(onMessage);
-
-const URL_NOTIFIER_MAIN =
-  '(function(){function notify(){document.dispatchEvent(new CustomEvent("maude-url-change",{detail:location.href}));}notify();var origPush=history.pushState,origReplace=history.replaceState;history.pushState=function(){origPush.apply(this,arguments);notify();};history.replaceState=function(){origReplace.apply(this,arguments);notify();};window.addEventListener("popstate",notify);window.addEventListener("hashchange",notify);})();';
-
-function runUrlNotifierIsolated() {
-  function sendUrl(u) {
-    try {
-      if (chrome.runtime?.id) chrome.runtime.sendMessage({ type: 'pageUrl', url: u || location.href });
-    } catch (_) {}
-  }
-  sendUrl(location.href);
-  document.addEventListener('maude-url-change', (e) => sendUrl(e.detail));
-}
-
-function onActionClicked(tab) {
-  panelTabId = tab.id;
-  panelUrl = tab.url || null;
-  chrome.sidePanel.open({ windowId: tab.windowId });
-  injectScript(tab.id, URL_NOTIFIER_MAIN).then(() => {
-    return chrome.scripting.executeScript({
-      target: { tabId: tab.id },
-      world: 'ISOLATED',
-      func: runUrlNotifierIsolated,
+chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
+  if (msg.type === 'getCurrentTabUrl' && sender.id === chrome.runtime.id) {
+    chrome.tabs.query({ active: true, lastFocusedWindow: true }, (tabs) => {
+      const url = tabs[0] && tabs[0].url ? tabs[0].url : '';
+      sendResponse(url);
     });
-  }).catch(() => {});
-}
-chrome.action.onClicked.addListener(onActionClicked);
-
+    return true;
+  }
+});
