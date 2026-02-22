@@ -103,13 +103,18 @@
     const manifest = await res.json();
     const base = url.replace(/\/[^/]*$/, '/');
     const matcher = manifest.matches || '*';
-    const jsFile = manifest.js;
     let scriptContent = '';
-    if (jsFile) {
-      const scriptResourceUrl = jsFile.startsWith('http') ? jsFile : base + jsFile;
-      const r = await fetch(scriptResourceUrl);
-      if (!r.ok) throw new Error('Script not found: ' + jsFile);
-      scriptContent = await r.text();
+    if (manifest['js-raw']) {
+      scriptContent = manifest['js-raw'];
+    } else if (manifest['js-url']) {
+      const jsUrl = manifest['js-url'];
+      const scriptResourceUrl = jsUrl.startsWith('http') ? jsUrl : base + jsUrl;
+      try {
+        const res = await fetch(scriptResourceUrl);
+        scriptContent = await res.text();
+      } catch (err) {
+        throw new Error('Unable to fetch ' + scriptResourceUrl + ' (' + err.message || err + ')');
+      }
     }
     const delay = manifest.delaySeconds;
     return {

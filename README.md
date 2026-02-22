@@ -33,14 +33,16 @@ Press the bin icon next to any existing maude to delete it (a confirmation will 
 
 ## Publishing and importing maudes
 
-To **import** a maude from a URL: click **Import** in the side panel, enter the URL of a manifest file, then **Load**. You can review and edit the maude before saving.
+To **import** a maude from a URL: click **Import** in the side panel, enter the `maude.json` URL, then **Load**. You can review and edit the maude before saving.
 
-To **publish** a maude for others: host two files on the same path (e.g. GitHub Pages or any static host):
+To **publish** a maude for others, share the following file(s):
 
-1. **maude.json** - JSON with `name`, `matches` (single URL pattern), and `js` (script filename relative to the manifest). Optional: `matcherMode` ("wildcard" or "regex"), `delaySeconds`, `injectionCondition`.
-2. Your **script file** - the JavaScript to inject.
+1. **maude.json** - JSON with `name`, `matches` (single URL pattern), and either `js-url` (script filename or URL) or `js-raw` (inline JavaScript string). Optional: `matcherMode` ("wildcard" or "regex"), `delaySeconds`, `injectionCondition`.
+2. Your **script file** (if using `js-url`) - the JavaScript to inject.
 
 See the [example in docs/examples](https://github.com/privman/maude/tree/main/docs/examples/copy-gcal-event-link) (maude.json + script).
 
-If the manifest is at `https://yoursite.com/maude/maude.json`, Maude fetches the script from `https://yoursite.com/maude/my-script.js`. Full details: [docs](https://privman.github.io/maude/#managing-maudes).
+Note: If the manifest is at `https://yoursite.com/maude/maude.json` and you use `js-url` with `my-script.js`, Maude fetches the script from `https://yoursite.com/maude/my-script.js`.
+
+Full details: [docs](https://privman.github.io/maude/#managing-maudes).
 

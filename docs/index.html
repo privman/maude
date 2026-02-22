@@ -4,11 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Maude - Mod the web</title>
-  <meta name="description" content="A browser extension for injecting your own scripts into web pages based on URL rules. Mod web pages and web apps the way you want.">
+  <meta name="description"
+    content="A browser extension for injecting your own scripts into web pages based on URL rules. Mod web pages and web apps the way you want.">
   <link rel="icon" href="https://github.com/privman/maude/raw/main/icons/icon32.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,600;1,9..40,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,600;1,9..40,400&display=swap"
+    rel="stylesheet">
   <link rel="stylesheet" href="tokens.css">
   <style>
     * { box-sizing: border-box; }
@@ -291,7 +293,9 @@
     <aside class="sidebar">
       <nav class="toc" aria-label="Contents">
         <ul>
-          <li class="back-to-top" id="back-to-top-item"><a href="#top"><span class="material-icons">arrow_up</span> Back to top</a></li>
+          <li class="back-to-top" id="back-to-top-item">
+            <a href="#top"><span class="material-icons">arrow_up</span> Back to top</a>
+          </li>
           <li><a href="#getting-started">Getting started</a></li>
           <li><a href="#creating-a-maude">Creating a maude</a></li>
           <li><a href="#managing-maudes">Managing maudes</a></li>
@@ -327,7 +331,8 @@
     <ol>
       <li>Install Maude from the Chrome Web Store. (version 0.1.1 is currently in review)</li>
       <li>Click the Maude icon in your toolbar to open the side panel.</li>
-      <li>Click the <strong>+</strong> button to add a maude, or <strong>Import</strong> to add one from a manifest URL.</li>
+      <li>Click the <strong>+</strong> button to add a maude, or <strong>Import</strong> to add one from a manifest
+        URL.</li>
     </ol>
 
     <h2 id="creating-a-maude">Creating a maude</h2>
@@ -338,7 +343,8 @@
     <h3>URL matcher</h3>
     <p>This defines which pages the script runs on (in combination with the condition below, if specified).</p>
     <ul>
-      <li><strong>Wildcard</strong>: Use <code>?</code> for a single character and <code>*</code> for any sequence. Example: <code>https://*.example.com/*</code> matches all pages on any subdomain of example.com.</li>
+      <li><strong>Wildcard</strong>: Use <code>?</code> for a single character and <code>*</code> for any sequence.
+        Example: <code>https://*.example.com/*</code> matches all pages on any subdomain of example.com.</li>
       <li><strong>Regex</strong>: Use a full JavaScript regular expression to match the page URL.</li>
     </ul>
 
@@ -347,44 +353,68 @@
     <ul>
       <li><strong>Editor</strong>: Type or paste code into the editor.</li>
       <li><strong>Upload</strong>: Select a <code>.js</code> file from your computer.</li>
-      <li><strong>From URL</strong>: Enter a URL that returns JavaScript. Only use sources you trust—the script runs with full page access.</li>
+      <li><strong>From URL</strong>: Enter a URL that returns JavaScript. Only use sources you trust—the script runs
+        with full page access.</li>
     </ul>
 
     <h3>Injection timing</h3>
     <ul>
-      <li><strong>Delay (seconds)</strong>: Wait this many seconds after the page load (or after the condition starts being checked) before injecting. Use this when the page needs time to render.</li>
+      <li><strong>Delay (seconds)</strong>: Wait this many seconds after the page load (or after the condition starts
+        being checked) before injecting. Use this when the page needs time to render.</li>
       <li>
-        <strong>Condition</strong>: JavaScript that runs in the page; the script is injected only if and when this expression returns a truthy value. For example, <code>document.querySelector('.app')</code> injects once that element exists.<br />
+        <strong>Condition</strong>: JavaScript that runs in the page; the script is injected only if and when this
+        expression returns a truthy value. For example, <code>document.querySelector('.app')</code> injects once that
+        element exists.<br />
         If you also set a delay, the condition is checked repeatedly at that interval until it passes.</li>
     </ul>
 
     <h2 id="managing-maudes">Managing maudes</h2>
-    <p>In the maude list, use the <strong>pencil</strong> icon to edit a maude. Use the <strong>bin</strong> icon to delete it; you'll be asked to confirm first.</p>
-    <p class="tip">If you added the script by uploading a file or fetching from a URL, you'll need to repeat this if you want to update the script (Maude doesn't re-read the source).</p>
+    <p>In the maude list, use the <strong>pencil</strong> icon to edit a maude. Use the <strong>bin</strong> icon to
+      delete it; you'll be asked to confirm first.</p>
+    <p class="tip">If you added the script by uploading a file or fetching from a URL, you'll need to repeat this if you
+      want to update the script (Maude doesn't re-read the source).</p>
 
     <h2 id="publishing-maudes">Publishing maudes</h2>
-    <p>You can share a maude by publishing a <strong>manifest</strong> and script file. Others can add your maude by clicking <strong>Import</strong> in Maude and entering the manifest URL.</p>
-    <p>Host two files on the same path (e.g. on GitHub Pages or any static host):</p>
+    <p>You can share a maude by publishing a <strong>maude.json</strong> manifest file. Others can add your maude by
+      clicking <strong>Import</strong> in Maude and entering the manifest URL:</p>
     <ul>
-      <li><strong>maude.json</strong> - JSON describing the maude (name, URL matcher, script filename, and optional timing).</li>
-      <li>Your <strong>script file</strong> - the JavaScript to inject (referenced by filename in the manifest).</li>
+      <li><strong>maude.json</strong> - JSON describing the maude (name, script as either a URL or raw JS, and
+        injection configuration).</li>
+      <li>Your <strong>script file</strong> (if sharing as a separate file).</li>
     </ul>
     <p>Manifest format:</p>
     <ul>
       <li><code>name</code> - Maude name (string).</li>
       <li><code>matches</code> - Single URL pattern, wildcard or regex (string).</li>
-      <li><code>js</code> - Single script filename (relative to the manifest URL) or full URL (string).</li>
+      <li>
+        Either:
+        <ul>
+          <li><code>js-url</code> - Script URL: filename relative to the manifest URL, or full URL (string).</li>
+          <li><code>js-raw</code> - Inline script: the JavaScript source as a string.</li>
+        </ul>
+      </li>
       <li>Optional: <code>matcherMode</code> - <code>"wildcard"</code> or <code>"regex"</code> (default wildcard).</li>
-      <li>Optional: <code>delaySeconds</code> - Delay before injection (number).</li>
-      <li>Optional: <code>injectionCondition</code> - JavaScript expression that must be truthy before injection (string).</li>
+      <li>Optional: <code>injectionCondition</code> - JavaScript expression that must be truthy before injection
+        (string).</li>
+      <li>Optional: <code>delaySeconds</code> - Delay before injection (in seconds; number). If specified along with a
+        condition, used as the interval between condition checks.</li>
     </ul>
-    <p>Example <code>maude.json</code>:</p>
+    <p>Example <code>maude.json</code> with script URL:</p>
     <pre><code>{
   "name": "My maude",
   "matches": "https://example.com/*",
-  "js": "my-script.js"
+  "js-url": "my-script.js"
 }</code></pre>
-    <p>If <code>maude.json</code> is at <code>https://yoursite.com/maude/maude.json</code> and <code>my-script.js</code> is in the same directory, Maude will fetch the maude manifest and then the script from <code>https://yoursite.com/maude/my-script.js</code>. Users can review and edit the imported maude before saving.</p>
+    <p>Example with inline script (<code>js-raw</code>):</p>
+    <pre><code>{
+  "name": "My maude",
+  "matches": "https://example.com/*",
+  "js-raw": "document.body.style.background = 'linen';"
+}</code></pre>
+    <p>If <code>maude.json</code> is at <code>https://yoursite.com/maude/maude.json</code>
+      and you use <code>js-url</code> with <code>my-script.js</code>, Maude fetches the script from
+      <code>https://yoursite.com/maude/my-script.js</code>. With <code>js-raw</code>, no separate file is needed. Users
+      can review and edit the imported maude before saving.</p>
 
     <h2 id="use-cases">Use cases</h2>
     <ul>
